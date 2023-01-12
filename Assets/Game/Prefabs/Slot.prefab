@@ -290,6 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _netItemImage: {fileID: 3858292535891130109}
   _blurItemImage: {fileID: 2470746109726988034}
+  _spinType: 0
 --- !u!1 &2994500223467780858
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,6 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _netItemImage: {fileID: 9120147386410138532}
   _blurItemImage: {fileID: 5588631955971087322}
+  _spinType: 0
 --- !u!1 &3858292535891130109
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _netItemImage: {fileID: 1018381863213577116}
   _blurItemImage: {fileID: 6777638517868754092}
+  _spinType: 0
 --- !u!1 &5588631955971087322
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,6 +673,7 @@ MonoBehaviour:
   - {fileID: 4402171119898031847}
   - {fileID: 6938289902295284784}
   - {fileID: 1859208769459829022}
+  _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
 --- !u!1 &6532388348374362414
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,6 +736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _netItemImage: {fileID: 1042229321592360663}
   _blurItemImage: {fileID: 7217409229539501767}
+  _spinType: 0
 --- !u!1 &6750239878824878484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,6 +1027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _netItemImage: {fileID: 9036302324415376608}
   _blurItemImage: {fileID: 6750239878824878484}
+  _spinType: 0
 --- !u!1 &9036302324415376608
 GameObject:
   m_ObjectHideFlags: 0

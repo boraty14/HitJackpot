@@ -79,11 +79,11 @@ public class SpinResult
 [Serializable]
 public enum SpinType 
 {
-    Jackpot,
-    Wild,
-    Seven,
-    Bonus,
-    A
+    Jackpot = 0,
+    Wild = 1,
+    Seven = 2,
+    Bonus = 3,
+    A = 4
 }
 
 [Serializable]

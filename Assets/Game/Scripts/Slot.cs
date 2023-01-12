@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,26 +7,25 @@ using Random = UnityEngine.Random;
 public class Slot : MonoBehaviour
 {
     [SerializeField] private RectTransform _slotRectTransform;
-    [SerializeField] private float _scrollDuration;
     [SerializeField] private List<SlotItem> _slotItems;
+    [SerializeField] private SpinSettings _spinSettings;
     private readonly List<SpinType> _spinTypes = new List<SpinType>();
     private int _currentSlotItemIndex;
     private float _slotRollEndHeight;
     private const float SlotItemHeight = 260f;
 
-    private void Start()
+    public void Initialize()
     {
         SetSlotItems();
         RandomizeSlotAtStart();
-        StartCoroutine(SpinSlot());
     }
 
     private void SetSlotItems()
     {
         _slotRollEndHeight = _slotItems.Count % 2 == 0 ? -SlotItemHeight / 2f : 0f;
         _slotRectTransform.anchoredPosition = new Vector2(_slotRectTransform.anchoredPosition.x, _slotRollEndHeight);
-        _currentSlotItemIndex = (_slotItems.Count-1) / 2;
-        
+        _currentSlotItemIndex = (_slotItems.Count - 1) / 2;
+
         foreach (var slotItem in _slotItems)
         {
             _spinTypes.Add(slotItem.GetSpinType());
@@ -43,21 +41,51 @@ public class Slot : MonoBehaviour
         }
     }
 
-    private IEnumerator SpinSlot()
+    public async Task SpinDefaultSlotToState(SpinType selectedSpinType, int turnCount)
     {
-        while (true)
+        for (int i = 0; i < turnCount * _spinTypes.Count; i++)
         {
-            MoveLastSlotItemUp();
-            _slotRectTransform.anchoredPosition += Vector2.up * SlotItemHeight;
-            yield return _slotRectTransform.DOAnchorPosY(_slotRollEndHeight, _scrollDuration)
-                .SetEase(Ease.Linear).WaitForCompletion();
-            _currentSlotItemIndex = (_currentSlotItemIndex - 1) % _spinTypes.Count;
+            await SpinOneItem(_spinSettings.FastSpinItemPassDuration);
         }
+
+        var selectedSpinIndex = (int)selectedSpinType;
+        while (selectedSpinIndex != _currentSlotItemIndex)
+        {
+            await SpinOneItem(_spinSettings.FastSpinItemPassDuration);
+        }
+    }
+
+    public async Task SpinDelayedSlotToState(SpinType selectedSpinType, float spinDuration)
+    {
+        var selectedSpinIndex = (int)selectedSpinType;
+        var spinCount = (_currentSlotItemIndex - selectedSpinIndex) % _spinTypes.Count;
+        if (spinCount <= 0) spinCount += _spinTypes.Count;
+
+        var spinWaitFactor = spinDuration / ((spinCount * (spinCount + 1)) / 2);
+        for (int i = 0; i < spinCount; i++)
+        {
+            await SpinOneItem(spinWaitFactor * (i + 1));
+        }
+    }
+
+    private async Task SpinOneItem(float spinDuration)
+    {
+        MoveLastSlotItemUp();
+        _slotRectTransform.anchoredPosition += Vector2.up * SlotItemHeight;
+        await _slotRectTransform.DOAnchorPosY(_slotRollEndHeight, spinDuration)
+            .SetEase(Ease.Linear).AsyncWaitForCompletion();
     }
 
     private void MoveLastSlotItemUp()
     {
         var lastTransform = transform.GetChild(_slotItems.Count - 1);
         lastTransform.SetSiblingIndex(0);
+        SetSlotItemIndex();
+    }
+
+    private void SetSlotItemIndex()
+    {
+        _currentSlotItemIndex = (_currentSlotItemIndex - 1) % _spinTypes.Count;
+        if (_currentSlotItemIndex < 0) _currentSlotItemIndex += _spinTypes.Count;
     }
 }

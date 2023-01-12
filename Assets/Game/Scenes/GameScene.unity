@@ -407,7 +407,7 @@ PrefabInstance:
     - target: {fileID: 6532388348102942164, guid: 69f111736faf3084e810e25c202f00d8,
         type: 3}
       propertyPath: _scrollDuration
-      value: 0.5
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6532388348102942165, guid: 69f111736faf3084e810e25c202f00d8,
         type: 3}
@@ -626,6 +626,7 @@ GameObject:
   - component: {fileID: 388704234}
   - component: {fileID: 388704236}
   - component: {fileID: 388704235}
+  - component: {fileID: 388704237}
   m_Layer: 5
   m_Name: SlotWindow
   m_TagString: Untagged
@@ -692,6 +693,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388704233}
   m_CullTransparentMesh: 1
+--- !u!114 &388704237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388704233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d263573f640e4fa111b43659f292f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slots:
+  - {fileID: 578739136}
+  - {fileID: 1790147185}
+  - {fileID: 1532774723}
+  _spinData: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,6 +832,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6532388347538392598}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &578739136 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6532388348102942164, guid: 69f111736faf3084e810e25c202f00d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6532388347538392598}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99864500dd65bc94f8b5abce621fa47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,7 +1032,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896471408}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1381,6 +1412,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1532774723 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6532388348102942164, guid: 69f111736faf3084e810e25c202f00d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 302951962}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99864500dd65bc94f8b5abce621fa47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1621778239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1581,7 +1624,7 @@ PrefabInstance:
     - target: {fileID: 6532388348102942164, guid: 69f111736faf3084e810e25c202f00d8,
         type: 3}
       propertyPath: _scrollDuration
-      value: 0.5
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6532388348102942165, guid: 69f111736faf3084e810e25c202f00d8,
         type: 3}
@@ -1831,6 +1874,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1757475595}
   m_CullTransparentMesh: 1
+--- !u!114 &1790147185 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6532388348102942164, guid: 69f111736faf3084e810e25c202f00d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1621778239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99864500dd65bc94f8b5abce621fa47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1818095360
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,7 +2321,7 @@ PrefabInstance:
     - target: {fileID: 6532388348102942164, guid: 69f111736faf3084e810e25c202f00d8,
         type: 3}
       propertyPath: _scrollDuration
-      value: 0.5
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6532388348102942165, guid: 69f111736faf3084e810e25c202f00d8,
         type: 3}
