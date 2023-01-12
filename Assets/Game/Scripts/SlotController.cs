@@ -20,7 +20,7 @@ public class SlotController : MonoBehaviour
     public async void Spin(float spinSlowDownDuration = -1f)
     {
         if (_isSpinning) return;
-        
+
         _isSpinning = true;
         var spinResult = await SpinDefault();
         

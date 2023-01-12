@@ -43,6 +43,7 @@ public class Slot : MonoBehaviour
 
     public async Task SpinDefaultSlotToState(SpinType selectedSpinType, int turnCount)
     {
+        SetSlotItemImages(false);
         for (int i = 0; i < turnCount * _spinTypes.Count; i++)
         {
             await SpinOneItem(_spinSettings.FastSpinItemPassDuration);
@@ -53,6 +54,7 @@ public class Slot : MonoBehaviour
         {
             await SpinOneItem(_spinSettings.FastSpinItemPassDuration);
         }
+        SetSlotItemImages(true);
     }
 
     public async Task SpinDelayedSlotToState(SpinType selectedSpinType, float spinDuration)
@@ -87,5 +89,13 @@ public class Slot : MonoBehaviour
     {
         _currentSlotItemIndex = (_currentSlotItemIndex - 1) % _spinTypes.Count;
         if (_currentSlotItemIndex < 0) _currentSlotItemIndex += _spinTypes.Count;
+    }
+
+    private void SetSlotItemImages(bool state)
+    {
+        for (int i = 0; i < _slotItems.Count; i++)
+        {
+            _slotItems[i].SetImageState(state);        
+        }
     }
 }
