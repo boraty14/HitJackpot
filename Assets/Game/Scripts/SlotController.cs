@@ -31,6 +31,7 @@ public class SlotController : MonoBehaviour
         }
         
         await _slots[2].SpinDelayedSlotToState(spinResult.thirdSpin, spinSlowDownDuration);
+        _isSpinning = false;
     }
 
     private async Task<SpinResult> SpinDefault()

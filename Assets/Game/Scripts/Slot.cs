@@ -62,6 +62,7 @@ public class Slot : MonoBehaviour
         var selectedSpinIndex = (int)selectedSpinType;
         var spinCount = (_currentSlotItemIndex - selectedSpinIndex) % _spinTypes.Count;
         if (spinCount <= 0) spinCount += _spinTypes.Count;
+        spinCount += _spinTypes.Count * Mathf.RoundToInt(spinDuration);
 
         var spinWaitFactor = spinDuration / ((spinCount * (spinCount + 1)) / 2);
         for (int i = 0; i < spinCount; i++)
