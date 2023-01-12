@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 
 public class SlotItem : MonoBehaviour
 {
     [SerializeField] private GameObject _netItemImage;
     [SerializeField] private GameObject _blurItemImage;
+    [SerializeField] private SpinType _spinType;
 
+    public SpinType GetSpinType() => _spinType;
+    
     public void SetImageState(bool state)
     {
         _netItemImage.SetActive(state);
