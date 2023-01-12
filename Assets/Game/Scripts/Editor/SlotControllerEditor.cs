@@ -10,15 +10,15 @@ public class SlotControllerEditor : Editor
         SlotController slotController = (SlotController)target;
         if (GUILayout.Button("Test Fast Spin"))
         {
-            slotController.Spin();
+            slotController.Spin(0);
         }
         if (GUILayout.Button("Test Normal Spin"))
         {
-            slotController.Spin(1f);
+            slotController.Spin(1);
         }
         if (GUILayout.Button("Test Slow Spin"))
         {
-            slotController.Spin(2.5f);
+            slotController.Spin(2);
         }
     }
 }
