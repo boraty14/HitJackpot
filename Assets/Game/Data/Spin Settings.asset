@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28b6572695ed8e4ca4f07e28d196a58, type: 3}
   m_Name: Spin Settings
   m_EditorClassIdentifier: 
-  <FastSpinItemPassDuration>k__BackingField: 0.05
-  <DefaultSpinTurnCount>k__BackingField: 1
+  <FastSpinItemPassDuration>k__BackingField: 0.02
+  <DefaultSpinTurnCount>k__BackingField: 3
   <NormalSpinSlowDownDuration>k__BackingField: 1
   <SlowSpinSlowDownDuration>k__BackingField: 2.5
   <CoinEffectRate>k__BackingField: 1
