@@ -32,6 +32,9 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
+    - CW.Common
+    - LeanCommon
+    - LeanPool
     - PPv2URPConverters
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
