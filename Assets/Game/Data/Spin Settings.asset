@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <FastSpinItemPassDuration>k__BackingField: 0.02
   <DefaultSpinTurnCount>k__BackingField: 3
+  <DefaultSpinTurnOffset>k__BackingField: 2
   <NormalSpinSlowDownDuration>k__BackingField: 1
   <SlowSpinSlowDownDuration>k__BackingField: 2.5
   <CoinEffectRate>k__BackingField: 1
