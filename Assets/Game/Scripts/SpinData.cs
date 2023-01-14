@@ -1,50 +1,151 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [CreateAssetMenu]
 public class SpinData : ScriptableObject
-{ 
+{
+    public SpinResultList sp;
     public List<SpinResult> spinResults;
     public int spinIndex;
-    private readonly List<SpinResult> _possibleSpinResults = new List<SpinResult>();
     private const string SaveKey = "SAVEKEY";
 
-    public SpinResult Spin()
+    
+    public void GenerateNewSpinList()
     {
-        _possibleSpinResults.Clear();
-        foreach (var spinResult in spinResults)
+        sp.spinResultList = new SpinResult[100];
+        Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
+        foreach (var result in spinResults)
+        { 
+            resultAppearDictionary[result] = 0;
+        }
+        
+        
+        var leastPercentage = spinResults.OrderBy(result => result.percentage).First().percentage;
+        int spinPeriod = 100 / leastPercentage;
+
+        for (int i = 0; i < leastPercentage; i++)
         {
-            if (spinIndex >= spinResult.resultAppearCount * (100 / spinResult.percentage))
+            foreach (var spinResult in spinResults)
             {
-                _possibleSpinResults.Add(spinResult);
+                
+            }
+        }
+        
+        
+    }
+    
+    public void GenerateSpinList()
+    {
+        sp.spinResultList = new SpinResult[100];
+        var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToArray();
+        bool[] resultOccupiedArray = new bool[100];
+
+        Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
+        foreach (var result in sortedResults)
+        {
+            resultAppearDictionary[result] = 0;
+        }
+
+        int resultCount = sortedResults.Length;
+        for (int i = 0; i < resultCount; i++)
+        {
+            var currentResult = sortedResults[i];
+            int resultInterval = 100 / currentResult.percentage;
+            int remainFromDivide = 100 - (resultInterval * currentResult.percentage);
+            int currentStartIndex = 0;
+            for (int j = 0; j < currentResult.percentage; j++)
+            {
+                Debug.Log("current start index " + currentStartIndex);
+                int remainExtension = j >= remainFromDivide ? 0 : 1;
+
+                int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
+                //int placementIndex = j * resultInterval + randomPlacementIndexOffset;
+                int placementIndex = currentStartIndex + randomPlacementIndexOffset;
+                int counter = 0;
+
+                while (resultOccupiedArray[placementIndex])
+                {
+                    randomPlacementIndexOffset = (randomPlacementIndexOffset + 1) % (resultInterval + remainExtension); 
+                    placementIndex = currentStartIndex + randomPlacementIndexOffset;
+                    counter++;
+                    if (counter > 50)
+                    {
+                        Debug.LogError("percentage " + currentResult.percentage + " j: " + j);
+                        PrintResults();
+                        for (int k = 0; k < 100; k++)
+                        {
+                            Debug.Log(k + " " + resultOccupiedArray[k]);
+                        }
+                        return;
+                    }
+                }
+
+                sp.spinResultList[placementIndex] = currentResult;
+                resultOccupiedArray[placementIndex] = true;
+                currentStartIndex += resultInterval + remainExtension;
             }
         }
 
-        int randomSpinResultIndex = Random.Range(0, _possibleSpinResults.Count);
-        _possibleSpinResults[randomSpinResultIndex].resultAppearCount++;
         
-        IncreaseSpinIndex();
-        return _possibleSpinResults[randomSpinResultIndex];
-    }
+        
+        
+        
+        /*for (int i = 0; i < 100; i++)
+        {
+            sortedResults = spinResults.OrderBy(result => resultAppearDictionary[result]).ToArray();
+            for (int j = 0; j < resultCount; j++)
+            {
+                var currentResult = sortedResults[j];
+                if(i < resultAppearDictionary[currentResult] * (100/currentResult.percentage)) continue;
 
-    private void IncreaseSpinIndex()
+                sp.spinResultList[i] = currentResult;
+                resultAppearDictionary[currentResult]++;
+                break;
+            }
+        }*/
+    }
+    
+    
+    private void PrintResults()
     {
-        spinIndex++;
-        if (spinIndex != 100) return;
-        
-        ResetStates();
-        
+        Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
+                foreach (var spinResult in spinResults)
+                {
+                    var keyName = GetKeyName(spinResult);
+                    resultDictionary.Add(keyName,new List<int>());
+                }
+                
+                for (int i = 0; i < 100; i++)
+                {
+                    if(sp.spinResultList[i] == null) continue;
+                    resultDictionary[GetKeyName(sp.spinResultList[i])].Add(i);
+                }
+                
+                foreach (var spinResult in spinResults)
+                {
+                    var keyName = GetKeyName(spinResult);
+                    Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " + string.Join(", ",resultDictionary[keyName]));
+                }
+    }
+    
+    
+private string GetKeyName(SpinResult spinResult)
+    {
+        return $"{spinResult.firstSpin}, {spinResult.secondSpin}, {spinResult.thirdSpin}";
     }
 
-    public void ResetStates()
+    public SpinResult Spin()
+    {
+        var result = sp.spinResultList[spinIndex % 100];
+        spinIndex++;
+        return result;
+    }
+
+    public void ResetSpinIndex()
     {
         spinIndex = 0;
-        foreach (var spinResult in spinResults)
-        {
-            spinResult.resultAppearCount = 0;
-        }
     }
 
     public void SaveSpinData()
@@ -72,8 +173,7 @@ public class SpinResult
     public SpinType firstSpin;
     public SpinType secondSpin;
     public SpinType thirdSpin;
-    public int percentage;
-    [HideInInspector] public int resultAppearCount;
+    [Range(1,50)]public int percentage;
 }
 
 [Serializable]

@@ -10,35 +10,41 @@ public class SpinDataEditor : Editor
     { 
         base.OnInspectorGUI();
         SpinData spinData = (SpinData)target;
-        
-        if (GUILayout.Button("Test 100 Spin"))
-        {
-            Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
-            foreach (var spinResult in spinData.spinResults)
-            {
-                var keyName = GetKeyName(spinResult);
-                resultDictionary.Add(keyName,new List<int>());
-            }
-            
-            for (int i = 0; i < 100; i++)
-            {
-                var spinIndex = spinData.spinIndex;
-                var spinResult = spinData.Spin();
-                resultDictionary[GetKeyName(spinResult)].Add(spinIndex);
-            }
 
-            foreach (var spinResult in spinData.spinResults)
-            {
-                var keyName = GetKeyName(spinResult);
-                Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " + string.Join(", ",resultDictionary[keyName]));
-            }
+        if (GUILayout.Button("Generate Spin Result List"))
+        {
+            spinData.GenerateSpinList();
+            PrintResultList(spinData);
         }
+        
 
         if (GUILayout.Button("Reset States"))
         {
-            spinData.ResetStates();
+            spinData.ResetSpinIndex();
         }
         
+        
+    }
+
+    private void PrintResultList(SpinData spinData)
+    {
+        Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
+        foreach (var spinResult in spinData.spinResults)
+        {
+            var keyName = GetKeyName(spinResult);
+            resultDictionary.Add(keyName,new List<int>());
+        }
+        
+        for (int i = 0; i < 100; i++)
+        {
+            resultDictionary[GetKeyName(spinData.sp.spinResultList[i])].Add(i);
+        }
+        
+        foreach (var spinResult in spinData.spinResults)
+        {
+            var keyName = GetKeyName(spinResult);
+            Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " + string.Join(", ",resultDictionary[keyName]));
+        }
         
     }
 

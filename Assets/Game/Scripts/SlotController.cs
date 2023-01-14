@@ -44,7 +44,6 @@ public class SlotController : MonoBehaviour
     {
         _isSpinning = true;
         OnSpinStateChange?.Invoke(_isSpinning);
-        
     }
 
     private void StopSpinning(float coinEffectRate)
@@ -52,10 +51,9 @@ public class SlotController : MonoBehaviour
         _isSpinning = false;
         OnSpinStateChange?.Invoke(_isSpinning);
 
-        if (coinEffectRate < 0.1f) return;
+        if (coinEffectRate < 0.01f) return;
         var coinEffect = LeanPool.Spawn(_coinEffectPrefab,_coinEffectTransform);
         coinEffect.SetParticleEmission(coinEffectRate);
-
     }
 
     private async Task<SpinResult> SpinDefault()
@@ -93,8 +91,6 @@ public class SlotController : MonoBehaviour
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
-
         return 0f;
     }
-    
 }

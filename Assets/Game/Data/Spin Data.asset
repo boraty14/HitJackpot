@@ -12,55 +12,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43544663ed3a2ea43a3fbe9bd2e4b2ae, type: 3}
   m_Name: Spin Data
   m_EditorClassIdentifier: 
+  sp: {fileID: 11400000, guid: 333ce04281621134aaa6cacdb687d58f, type: 2}
   spinResults:
   - firstSpin: 4
     secondSpin: 1
     thirdSpin: 3
     percentage: 13
-    resultAppearCount: 0
   - firstSpin: 1
     secondSpin: 1
     thirdSpin: 2
     percentage: 13
-    resultAppearCount: 0
   - firstSpin: 0
     secondSpin: 0
     thirdSpin: 4
     percentage: 13
-    resultAppearCount: 0
   - firstSpin: 1
     secondSpin: 3
     thirdSpin: 4
     percentage: 13
-    resultAppearCount: 0
   - firstSpin: 3
     secondSpin: 4
     thirdSpin: 0
     percentage: 13
-    resultAppearCount: 0
   - firstSpin: 4
     secondSpin: 4
     thirdSpin: 4
     percentage: 9
-    resultAppearCount: 0
   - firstSpin: 3
     secondSpin: 3
     thirdSpin: 3
     percentage: 8
-    resultAppearCount: 0
   - firstSpin: 2
     secondSpin: 2
     thirdSpin: 2
     percentage: 7
-    resultAppearCount: 0
   - firstSpin: 1
     secondSpin: 1
     thirdSpin: 1
     percentage: 6
-    resultAppearCount: 0
   - firstSpin: 0
     secondSpin: 0
     thirdSpin: 0
     percentage: 5
-    resultAppearCount: 0
   spinIndex: 0
