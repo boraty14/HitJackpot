@@ -15,6 +15,8 @@ public class SpinGenerator : ScriptableObject
     
     public void GenerateSpinListNew()
     {
+        ES3.DeleteKey(SaveKey);
+        spinIndex = 0;
         sp.spinResultList = new SpinResult[100];
         bool[] resultOccupiedArray = new bool[100];
         Dictionary<SpinData, int> resultAppearCountDictionary = new Dictionary<SpinData, int>();
@@ -114,8 +116,10 @@ public class SpinGenerator : ScriptableObject
         return result;
     }
 
-    public void ResetSpinIndex()
+    public void ResetStates()
     {
+        ES3.DeleteKey(SaveKey);
+        sp.spinResultList = null;
         spinIndex = 0;
     }
 
@@ -131,10 +135,17 @@ public class SpinGenerator : ScriptableObject
 
     public void LoadSpinData()
     {
-        if (!ES3.KeyExists(SaveKey)) return;
-        var savedSpinData = ES3.Load<SpinSave>(SaveKey);
-        sp.spinResultList = savedSpinData.spinResults;
-        spinIndex = savedSpinData.spinIndex;
+        if (ES3.KeyExists(SaveKey))
+        {
+            var savedSpinData = ES3.Load<SpinSave>(SaveKey);
+            sp.spinResultList = savedSpinData.spinResults;
+            spinIndex = savedSpinData.spinIndex;
+        }
+        else if (sp.spinResultList == null || sp.spinResultList.Length == 0)
+        {
+            GenerateSpinListNew();        
+        }
+        
     }
 }
 

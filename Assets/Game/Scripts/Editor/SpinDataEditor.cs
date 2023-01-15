@@ -20,7 +20,7 @@ public class SpinDataEditor : Editor
 
         if (GUILayout.Button("Reset States"))
         {
-            spinGenerator.ResetSpinIndex();
+            spinGenerator.ResetStates();
         }
     }
 
