@@ -11,6 +11,15 @@ public class SpinData : ScriptableObject
     public int spinIndex;
     private const string SaveKey = "SAVEKEY";
 
+    private int GetLimitIndex(SpinResult spinResult,int totalAppear,int currentStartIndex)
+    {
+        int resultInterval = 100 / spinResult.percentage;
+        int remainFromDivide = 100 - (resultInterval * spinResult.percentage);
+        int remainExtension = totalAppear >= spinResult.percentage - remainFromDivide ? 1 : 0; // >= ???
+
+        return currentStartIndex + resultInterval + remainExtension -1 ;
+    }
+
     
     public void GenerateSpinListNew()
     {
@@ -18,7 +27,7 @@ public class SpinData : ScriptableObject
         bool[] resultOccupiedArray = new bool[100];
         Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
         Dictionary<SpinResult, int> currentStartIndexDictionary = new Dictionary<SpinResult, int>();
-        var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToArray();
+        var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToList();
         //set dictionaries
         foreach (var result in spinResults)
         { 
@@ -30,10 +39,11 @@ public class SpinData : ScriptableObject
         for (int i = 0; i < 100; i++)
         {
             //get min start index result
-            var currentResult = sortedResults[0];
-            for (int j = 1; j < sortedResults.Length; j++)
+            SpinResult currentResult = sortedResults[0];
+            for (int j = 1; j < sortedResults.Count; j++)
             {
-                if (currentStartIndexDictionary[sortedResults[j]] < currentStartIndexDictionary[currentResult])
+                if (GetLimitIndex(sortedResults[j],resultAppearDictionary[sortedResults[j]],currentStartIndexDictionary[sortedResults[j]])
+                    < GetLimitIndex(currentResult,resultAppearDictionary[currentResult],currentStartIndexDictionary[currentResult]))
                 {
                     currentResult = sortedResults[j];
                 }
@@ -41,7 +51,8 @@ public class SpinData : ScriptableObject
             
             int resultInterval = 100 / currentResult.percentage;
             int remainFromDivide = 100 - (resultInterval * currentResult.percentage);
-            int remainExtension = resultAppearDictionary[currentResult] > remainFromDivide ? 0 : 1;
+            //int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
+            int remainExtension = resultAppearDictionary[currentResult] >= currentResult.percentage - remainFromDivide ? 1 : 0;
             
             int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
             int placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
@@ -52,9 +63,10 @@ public class SpinData : ScriptableObject
                 randomPlacementIndexOffset = (randomPlacementIndexOffset + 1) % (resultInterval + remainExtension);
                 placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
                 counter++;
-                if (counter > 50)
+                if (counter > 50 || placementIndex >= 100)
                 {
                     Debug.LogError("percentage " + currentResult.percentage + " placement index: " + placementIndex + " i " + i);
+                    Debug.LogError(currentStartIndexDictionary[currentResult]);
                     PrintResults();
                     for (int k = 0; k < 100; k++)
                     {
@@ -71,6 +83,10 @@ public class SpinData : ScriptableObject
             resultOccupiedArray[placementIndex] = true;
             currentStartIndexDictionary[currentResult] += resultInterval + remainExtension;
             resultAppearDictionary[currentResult] = resultAppearDictionary[currentResult] + 1;
+            if (resultAppearDictionary[currentResult] == currentResult.percentage)
+            {
+                sortedResults.Remove(currentResult);
+            }
         }
         
         
