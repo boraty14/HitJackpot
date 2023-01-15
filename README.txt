@@ -21,6 +21,6 @@ index. The important part is scriptable object is not used for save system by it
 in the build this is not the case. This is why we need to serialize and store the data elsewhere and load it.
 If there is no save file, it uses the one we created from editor and if we did not, it generates one itself when the game starts.
 For the details of the algorithm which creates spin results and distributes each probability in almost perfect intervals, you can see
-"Assets/Game/Scripts/SpinData.cs". You can change the probability settings from "Assets/Game/Data/Spin Generator.asset"
+"Assets/Game/Scripts/GameElements/SpinData.cs". You can change the probability settings from "Assets/Game/Data/Spin Generator.asset"
 
 
