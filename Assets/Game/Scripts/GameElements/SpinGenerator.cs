@@ -174,7 +174,7 @@ namespace Game.Scripts.GameElements
                 spinResultList.Value = savedSpinData.spinResults;
                 spinIndex = savedSpinData.spinIndex;
             }
-            else if (spinResultList.Value == null || spinResultList.Value.Length == 0)
+            else
             {
                 GenerateSpinListNew();
             }

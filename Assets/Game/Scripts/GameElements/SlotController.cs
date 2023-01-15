@@ -61,7 +61,7 @@ namespace Game.Scripts.GameElements
         private async Task<SpinResult> SpinDefault()
         {
             var spinResult = spinGenerator.Spin();
-            Debug.Log(spinResult.firstSpin + " " + spinResult.secondSpin + " " + spinResult.thirdSpin);
+            Debug.Log(spinResult.firstSpin + " " + spinResult.secondSpin + " " + spinResult.thirdSpin + " spin index: " + (spinGenerator.spinIndex-1));
             _ = _slots[0].SpinDefaultSlotToState(spinResult.firstSpin,_spinSettings.DefaultSpinTurnCount);
             _ = _slots[1].SpinDefaultSlotToState(spinResult.secondSpin,_spinSettings.DefaultSpinTurnCount + _spinSettings.DefaultSpinTurnOffset);
             await _slots[2].SpinDefaultSlotToState(spinResult.thirdSpin,_spinSettings.DefaultSpinTurnCount + 2 * _spinSettings.DefaultSpinTurnOffset);
