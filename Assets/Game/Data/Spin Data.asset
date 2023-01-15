@@ -14,84 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sp: {fileID: 11400000, guid: 333ce04281621134aaa6cacdb687d58f, type: 2}
   spinResults:
-  - firstSpin: 4
-    secondSpin: 1
-    thirdSpin: 3
-    key: A
-    percentage: 11
   - firstSpin: 1
     secondSpin: 1
+    thirdSpin: 2
+    key: A
+    percentage: 40
+  - firstSpin: 1
+    secondSpin: 0
     thirdSpin: 2
     key: B
-    percentage: 9
-  - firstSpin: 0
-    secondSpin: 0
-    thirdSpin: 4
-    key: C
-    percentage: 8
-  - firstSpin: 1
-    secondSpin: 3
-    thirdSpin: 4
-    key: D
-    percentage: 7
-  - firstSpin: 3
-    secondSpin: 4
-    thirdSpin: 0
-    key: E
-    percentage: 7
-  - firstSpin: 4
-    secondSpin: 4
-    thirdSpin: 4
-    key: X
-    percentage: 7
-  - firstSpin: 3
-    secondSpin: 3
-    thirdSpin: 3
-    key: Y
-    percentage: 7
-  - firstSpin: 2
-    secondSpin: 2
-    thirdSpin: 2
-    key: Z
-    percentage: 7
+    percentage: 30
   - firstSpin: 1
     secondSpin: 1
-    thirdSpin: 1
-    key: W
-    percentage: 6
-  - firstSpin: 0
-    secondSpin: 0
     thirdSpin: 0
-    key: Q
-    percentage: 5
-  - firstSpin: 4
-    secondSpin: 3
-    thirdSpin: 2
-    key: R
-    percentage: 5
-  - firstSpin: 4
-    secondSpin: 3
-    thirdSpin: 1
-    key: H
-    percentage: 5
-  - firstSpin: 4
-    secondSpin: 3
-    thirdSpin: 0
-    key: T
-    percentage: 4
-  - firstSpin: 4
-    secondSpin: 2
-    thirdSpin: 1
-    key: U
-    percentage: 4
-  - firstSpin: 4
-    secondSpin: 2
-    thirdSpin: 0
-    key: I
-    percentage: 4
+    key: C
+    percentage: 20
   - firstSpin: 3
-    secondSpin: 2
-    thirdSpin: 0
-    key: O
-    percentage: 4
+    secondSpin: 1
+    thirdSpin: 2
+    key: D
+    percentage: 10
   spinIndex: 0

@@ -18,7 +18,7 @@ public class SpinData : ScriptableObject
         int remainFromDivide = 100 - (resultInterval * spinResult.percentage);
         int remainExtension = totalAppear >= remainFromDivide ? 0 : 1; // >= ???
 
-        return currentStartIndex + resultInterval + remainExtension -1 ;
+        return currentStartIndex + resultInterval  -1 ;
     }
 
     
@@ -50,8 +50,12 @@ public class SpinData : ScriptableObject
 
                 if (sortedIndex == currentIndex)
                 {
-                    var randomSelectIndex = Random.Range(0, 2);
-                    currentResult = randomSelectIndex == 0 ? currentResult : sortedResults[j];
+                    if (currentStartIndexDictionary[sortedResults[j]] < currentStartIndexDictionary[currentResult])
+                    {
+                        currentResult = sortedResults[j];
+                    }
+                    //var randomSelectIndex = Random.Range(0, 2);
+                    //currentResult = randomSelectIndex == 0 ? currentResult : sortedResults[j];
                 }
                 
                 else if (sortedIndex <= currentIndex)
@@ -70,9 +74,10 @@ public class SpinData : ScriptableObject
             int placementIndex = currentStartIndexDictionary[currentResult] + placementIndexOffset;
 
             int counter = 0;
+            int remainingOffset = remainFromDivide == 0 ? 0 : 1;
             while (resultOccupiedArray[placementIndex])
             {
-                placementIndexOffset = (placementIndexOffset + 1) % (resultInterval + remainExtension);
+                placementIndexOffset = (placementIndexOffset + 1) % (resultInterval + remainingOffset);
                 placementIndex = currentStartIndexDictionary[currentResult] + placementIndexOffset;
                 counter++;
                 if (counter > 50 || placementIndex >= 100)
@@ -93,8 +98,9 @@ public class SpinData : ScriptableObject
             
             sp.spinResultList[placementIndex] = currentResult;
             resultOccupiedArray[placementIndex] = true;
-            currentStartIndexDictionary[currentResult] += resultInterval + remainExtension;
-            resultAppearDictionary[currentResult] = resultAppearDictionary[currentResult] + 1;
+            currentStartIndexDictionary[currentResult] += resultInterval;
+            if (placementIndexOffset == resultInterval) currentStartIndexDictionary[currentResult]++;
+            resultAppearDictionary[currentResult]++;
 //            Debug.Log(currentResult.key);
             if (resultAppearDictionary[currentResult] == currentResult.percentage)
             {
