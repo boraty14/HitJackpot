@@ -43,7 +43,7 @@ public class SpinDataEditor : Editor
             var keyName = GetKeyName(spinData.spinResult);
             Debug.Log(keyName + " | | percentage " + spinData.percentage + " | |  " +
                       string.Join(", ", resultDictionary[keyName]) + " count: " + resultDictionary[keyName].Count +
-                      " remain : " + spinGenerator._remainExtensionCountDictionary[spinData]);
+                      " remain : " + spinGenerator.RemainExtensionCountDictionary[spinData]);
         }
     }
 

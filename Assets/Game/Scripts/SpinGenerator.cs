@@ -11,7 +11,7 @@ public class SpinGenerator : ScriptableObject
     public List<SpinData> spinDataList;
     [HideInInspector] public int spinIndex;
     private const string SaveKey = "SAVEKEY";
-    public Dictionary<SpinData, int> _remainExtensionCountDictionary;
+    public Dictionary<SpinData, int> RemainExtensionCountDictionary { get; private set; }
     
     public void GenerateSpinListNew()
     {
@@ -20,6 +20,10 @@ public class SpinGenerator : ScriptableObject
         spinResultList.Value = new SpinResult[100];
         bool[] resultOccupiedArray = new bool[100];
         Dictionary<SpinData, int> resultAppearCountDictionary = new Dictionary<SpinData, int>();
+        //remain ext dictionary is for selecting the intervals more precisely.
+        //For example if we have a %13 probability, 9 interval will be 8 element long and 4 interval
+        // will be 7 element long. This dictionary holds how many times a spin result is increased its
+        // interval by 1.
         Dictionary<SpinData, int> remainExtensionCountDictionary = new Dictionary<SpinData, int>();
         Dictionary<SpinData, int> startIndexDictionary = new Dictionary<SpinData, int>();
         
@@ -32,32 +36,52 @@ public class SpinGenerator : ScriptableObject
             remainExtensionCountDictionary[result] = 0;
         }
 
+        
+        //set 100 spin
         for (int i = 0; i < 100; i++)
         {
+            // so basically this part is for selecting spin with the at least interval limit.
+            // According to their appearance count and last interval start index, which both
+            // hold in dictionaries, I select the interval with minimal upper limit. For example
+            // we can have possibilities that should appear between 17-33, 20-39,24-29 ...
+            // In these intervals we chose the last one, 24-29 because it needs to placed sooner than others.
+            // After placing it, we increase its startIndex, appear count and remainderExtension count if we extended
+            // its interval by 1, according to its remainder after division with 100.
+            // The point is for probabilities that have remainder after dividing 100, not all the intervals are same.
+            // By checking if spin interval should be extended according to extension count and empty indices, we extend
+            // the interval or not. 
+            
+            //get minimal interval limit
             var currentResult = sortedResults[0];
             for (int j = 1; j < sortedResults.Count; j++)
             {
                 var comparingResult = sortedResults[j];
-                var comparingResultInterval = 100 / comparingResult.percentage;
-                var comparingResultRemainFactor = (100 % comparingResult.percentage != 0) &&
+                int comparingResultInterval = 100 / comparingResult.percentage;
+                int comparingResultRemainFactor = (100 % comparingResult.percentage != 0) &&
                                                   remainExtensionCountDictionary[comparingResult] < (100 % comparingResult.percentage) ?
                     1:0;
 
-                var currentResultInterval = 100 / currentResult.percentage;
-                var currentResultRemainFactor = (100 % currentResult.percentage != 0) &&
+                int currentResultInterval = 100 / currentResult.percentage;
+                int currentResultRemainFactor = (100 % currentResult.percentage != 0) &&
                                                 remainExtensionCountDictionary[currentResult] <
                                                 (100 % currentResult.percentage)
-                    ? 1
-                    : 0;
+                    ? 1 : 0;
+                
+                int comparingResultLimit = startIndexDictionary[comparingResult] + comparingResultInterval +
+                                           comparingResultRemainFactor;
 
-                if (startIndexDictionary[comparingResult] + comparingResultInterval + comparingResultRemainFactor ==
-                    startIndexDictionary[currentResult] + currentResultInterval + currentResultRemainFactor)
+                int currentResultLimit = startIndexDictionary[currentResult] + currentResultInterval +
+                                         currentResultRemainFactor;
+                
+
+                if (comparingResultLimit == currentResultLimit)
                 {
                     if (startIndexDictionary[comparingResult] < startIndexDictionary[currentResult])
                     {
                         currentResult = comparingResult;
                     }
 
+                    //add randomness for the same weighted probabilities
                     else if(comparingResult.percentage == currentResult.percentage)
                     {
                         int randomSelectIndex = Random.Range(0, 2);
@@ -66,30 +90,29 @@ public class SpinGenerator : ScriptableObject
                     
                 }
                 
-                if (startIndexDictionary[comparingResult] + comparingResultInterval + comparingResultRemainFactor <
-                    startIndexDictionary[currentResult] + currentResultInterval + currentResultRemainFactor)
-                {
-                    currentResult = comparingResult;
-                }
+                else if (comparingResultLimit < currentResultLimit) currentResult = comparingResult;
             }
 
-            var resultInterval = 100 / currentResult.percentage;
-            var resultRemainFactor = (100 % currentResult.percentage != 0) &&
+            // after getting result set its index in the first available space in interval
+            // and check if we should and if we will extend the interval
+            int resultInterval = 100 / currentResult.percentage;
+            int resultRemainFactor = (100 % currentResult.percentage != 0) &&
                                      remainExtensionCountDictionary[currentResult] < (100 % currentResult.percentage) ?
                 1:0;
-            var placementIndex = startIndexDictionary[currentResult];
-            var placementIndexOffset = 0;
+            int placementIndex = startIndexDictionary[currentResult];
+            int placementIndexOffset = 0;
             while (resultOccupiedArray[placementIndex + placementIndexOffset])
             {
                 placementIndexOffset++;
                 if (placementIndex + placementIndexOffset >= 100)
                 {
-                    //SHOULD NOT REACH HERE BUT JUST IN CASE IF I MADE A MISTAKE
+                    // SHOULD NOT REACH HERE BUT JUST IN CASE IF I MADE A MISTAKE
                     Debug.LogError("placement index " + placementIndex + " percentage " + currentResult.percentage); 
                     return;
                 }
             }
 
+            // set the result and update dictionaries
             resultOccupiedArray[placementIndex + placementIndexOffset] = true;
             startIndexDictionary[currentResult] += resultInterval;
             if ((placementIndexOffset >= resultInterval + resultRemainFactor - 1 && resultRemainFactor == 1) ||
@@ -105,7 +128,15 @@ public class SpinGenerator : ScriptableObject
 
         }
 
-        _remainExtensionCountDictionary = remainExtensionCountDictionary;
+        RemainExtensionCountDictionary = remainExtensionCountDictionary;
+        
+        
+        // Note: In general code should not contain this much comment and explain itself and a bit cleaner maybe.
+        // But this function in the whole project represents the algorithm used for probability distribution and
+        // it needs explaining. Optimization can be made but since the system itself does not trigger on the
+        // gameplay spinning and sets before game starts, I think it is acceptable. Also, other than
+        // this function this project does not have any other comments. I believe rest of the project
+        // is self explanatory.
     }
 
     public SpinResult Spin()
