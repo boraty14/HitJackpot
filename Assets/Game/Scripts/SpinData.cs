@@ -12,26 +12,67 @@ public class SpinData : ScriptableObject
     private const string SaveKey = "SAVEKEY";
 
     
-    public void GenerateNewSpinList()
+    public void GenerateSpinListNew()
     {
         sp.spinResultList = new SpinResult[100];
+        bool[] resultOccupiedArray = new bool[100];
         Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
+        Dictionary<SpinResult, int> currentStartIndexDictionary = new Dictionary<SpinResult, int>();
+        var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToArray();
+        //set dictionaries
         foreach (var result in spinResults)
         { 
             resultAppearDictionary[result] = 0;
+            currentStartIndexDictionary[result] = 0;
         }
-        
-        
-        var leastPercentage = spinResults.OrderBy(result => result.percentage).First().percentage;
-        int spinPeriod = 100 / leastPercentage;
 
-        for (int i = 0; i < leastPercentage; i++)
+
+        for (int i = 0; i < 100; i++)
         {
-            foreach (var spinResult in spinResults)
+            //get min start index result
+            var currentResult = sortedResults[0];
+            for (int j = 1; j < sortedResults.Length; j++)
             {
-                
+                if (currentStartIndexDictionary[sortedResults[j]] < currentStartIndexDictionary[currentResult])
+                {
+                    currentResult = sortedResults[j];
+                }
             }
+            
+            int resultInterval = 100 / currentResult.percentage;
+            int remainFromDivide = 100 - (resultInterval * currentResult.percentage);
+            int remainExtension = resultAppearDictionary[currentResult] > remainFromDivide ? 0 : 1;
+            
+            int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
+            int placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
+
+            int counter = 0;
+            while (resultOccupiedArray[placementIndex])
+            {
+                randomPlacementIndexOffset = (randomPlacementIndexOffset + 1) % (resultInterval + remainExtension);
+                placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
+                counter++;
+                if (counter > 50)
+                {
+                    Debug.LogError("percentage " + currentResult.percentage + " placement index: " + placementIndex + " i " + i);
+                    PrintResults();
+                    for (int k = 0; k < 100; k++)
+                    {
+                        var keyName = !resultOccupiedArray[k] ? "" : GetKeyName(sp.spinResultList[k]);
+                        Debug.Log(k + " " + resultOccupiedArray[k] + " " + keyName);
+                    }
+
+                    return;
+                }
+            }
+            
+            
+            sp.spinResultList[placementIndex] = currentResult;
+            resultOccupiedArray[placementIndex] = true;
+            currentStartIndexDictionary[currentResult] += resultInterval + remainExtension;
+            resultAppearDictionary[currentResult] = resultAppearDictionary[currentResult] + 1;
         }
+        
         
         
     }
@@ -57,7 +98,7 @@ public class SpinData : ScriptableObject
             int currentStartIndex = 0;
             for (int j = 0; j < currentResult.percentage; j++)
             {
-                Debug.Log("current start index " + currentStartIndex);
+                //Debug.Log("current start index " + currentStartIndex);
                 int remainExtension = j >= remainFromDivide ? 0 : 1;
 
                 int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
@@ -76,12 +117,14 @@ public class SpinData : ScriptableObject
                         PrintResults();
                         for (int k = 0; k < 100; k++)
                         {
-                            Debug.Log(k + " " + resultOccupiedArray[k]);
+                            var keyName = !resultOccupiedArray[k] ? "" : GetKeyName(sp.spinResultList[k]);
+                            Debug.Log(k + " " + resultOccupiedArray[k] + " " + keyName);
                         }
                         return;
                     }
                 }
 
+                Debug.Log("placement Index " +placementIndex);
                 sp.spinResultList[placementIndex] = currentResult;
                 resultOccupiedArray[placementIndex] = true;
                 currentStartIndex += resultInterval + remainExtension;
@@ -111,27 +154,27 @@ public class SpinData : ScriptableObject
     private void PrintResults()
     {
         Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
-                foreach (var spinResult in spinResults)
-                {
-                    var keyName = GetKeyName(spinResult);
-                    resultDictionary.Add(keyName,new List<int>());
-                }
+        foreach (var spinResult in spinResults)
+        {
+            var keyName = GetKeyName(spinResult);
+            resultDictionary.Add(keyName,new List<int>());
+        }
                 
-                for (int i = 0; i < 100; i++)
-                {
-                    if(sp.spinResultList[i] == null) continue;
-                    resultDictionary[GetKeyName(sp.spinResultList[i])].Add(i);
-                }
+        for (int i = 0; i < 100; i++)
+        {
+            if(sp.spinResultList[i] == null) continue;
+            resultDictionary[GetKeyName(sp.spinResultList[i])].Add(i);
+        }
                 
-                foreach (var spinResult in spinResults)
-                {
-                    var keyName = GetKeyName(spinResult);
-                    Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " + string.Join(", ",resultDictionary[keyName]));
-                }
+        foreach (var spinResult in spinResults)
+        {
+            var keyName = GetKeyName(spinResult);
+            Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " + string.Join(", ",resultDictionary[keyName]));
+        }
     }
     
     
-private string GetKeyName(SpinResult spinResult)
+    private string GetKeyName(SpinResult spinResult)
     {
         return $"{spinResult.firstSpin}, {spinResult.secondSpin}, {spinResult.thirdSpin}";
     }

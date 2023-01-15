@@ -13,7 +13,7 @@ public class SpinDataEditor : Editor
 
         if (GUILayout.Button("Generate Spin Result List"))
         {
-            spinData.GenerateSpinList();
+            spinData.GenerateSpinListNew();
             PrintResultList(spinData);
         }
         
