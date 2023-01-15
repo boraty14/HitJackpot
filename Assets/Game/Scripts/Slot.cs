@@ -18,6 +18,7 @@ public class Slot : MonoBehaviour
     {
         SetSlotItems();
         RandomizeSlotAtStart();
+        SetSlotItemImages(true);
     }
 
     private void SetSlotItems()
