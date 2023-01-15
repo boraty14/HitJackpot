@@ -11,7 +11,7 @@ public class SpinData : ScriptableObject
     public List<SpinResult> spinResults;
     public int spinIndex;
     private const string SaveKey = "SAVEKEY";
-    public Dictionary<string, int> remainingDictionary;
+    public Dictionary<SpinResult, int> _remainExtensionCountDictionary;
 
     private int GetLimitIndex(SpinResult spinResult,int totalAppear,int currentStartIndex)
     {
@@ -27,173 +27,87 @@ public class SpinData : ScriptableObject
     {
         sp.spinResultList = new SpinResult[100];
         bool[] resultOccupiedArray = new bool[100];
-        Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
-        Dictionary<SpinResult, int> currentStartIndexDictionary = new Dictionary<SpinResult, int>();
-        remainingDictionary = new Dictionary<string, int>();
+        Dictionary<SpinResult, int> resultAppearCountDictionary = new Dictionary<SpinResult, int>();
+        Dictionary<SpinResult, int> remainExtensionCountDictionary = new Dictionary<SpinResult, int>();
+        Dictionary<SpinResult, int> startIndexDictionary = new Dictionary<SpinResult, int>();
+        
         var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToList();
         //set dictionaries
         foreach (var result in spinResults)
         { 
-            resultAppearDictionary[result] = 0;
-            currentStartIndexDictionary[result] = 0;
-            remainingDictionary[GetKeyName(result)] = 0;
+            resultAppearCountDictionary[result] = 0;
+            startIndexDictionary[result] = 0;
+            remainExtensionCountDictionary[result] = 0;
         }
-
 
         for (int i = 0; i < 100; i++)
         {
-            //get min start index result
-            SpinResult currentResult = sortedResults[0];
+            var currentResult = sortedResults[0];
             for (int j = 1; j < sortedResults.Count; j++)
             {
-                var sortedIndex = GetLimitIndex(sortedResults[j], resultAppearDictionary[sortedResults[j]],
-                    currentStartIndexDictionary[sortedResults[j]]);
-                var currentIndex = GetLimitIndex(currentResult, resultAppearDictionary[currentResult],
-                    currentStartIndexDictionary[currentResult]);
+                var comparingResult = sortedResults[j];
+                var comparingResultInterval = 100 / comparingResult.percentage;
+                var comparingResultRemainFactor = (100 % comparingResult.percentage != 0) &&
+                                                  remainExtensionCountDictionary[comparingResult] < (100 % comparingResult.percentage) ?
+                    1:0;
 
-                if (sortedIndex == currentIndex)
+                var currentResultInterval = 100 / currentResult.percentage;
+                var currentResultRemainFactor = (100 % currentResult.percentage != 0) &&
+                                                remainExtensionCountDictionary[currentResult] <
+                                                (100 % currentResult.percentage)
+                    ? 1
+                    : 0;
+
+                if (startIndexDictionary[comparingResult] + comparingResultInterval + comparingResultRemainFactor ==
+                    startIndexDictionary[currentResult] + currentResultInterval + currentResultRemainFactor)
                 {
-                    if (currentStartIndexDictionary[sortedResults[j]] < currentStartIndexDictionary[currentResult])
+                    if (startIndexDictionary[comparingResult] < startIndexDictionary[currentResult])
                     {
-                        currentResult = sortedResults[j];
+                        currentResult = comparingResult;
                     }
-                    //var randomSelectIndex = Random.Range(0, 2);
-                    //currentResult = randomSelectIndex == 0 ? currentResult : sortedResults[j];
                 }
                 
-                else if (sortedIndex <= currentIndex)
+                if (startIndexDictionary[comparingResult] + comparingResultInterval + comparingResultRemainFactor <
+                    startIndexDictionary[currentResult] + currentResultInterval + currentResultRemainFactor)
                 {
-                    currentResult = sortedResults[j];
+                    currentResult = comparingResult;
                 }
             }
-            
-            int resultInterval = 100 / currentResult.percentage;
-            int remainFromDivide = 100 - (resultInterval * currentResult.percentage);
-            //int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
-            int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
-            
-            //int placementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
-            int placementIndexOffset = 0;
-            int placementIndex = currentStartIndexDictionary[currentResult] + placementIndexOffset;
 
-            int counter = 0;
-            int remainingOffset = remainFromDivide == 0 ? 0 : 1;
-            while (resultOccupiedArray[placementIndex])
+            var resultInterval = 100 / currentResult.percentage;
+            var resultRemainFactor = (100 % currentResult.percentage != 0) &&
+                                     remainExtensionCountDictionary[currentResult] < (100 % currentResult.percentage) ?
+                1:0;
+            var placementIndex = startIndexDictionary[currentResult];
+            var placementIndexOffset = 0;
+            while (resultOccupiedArray[placementIndex + placementIndexOffset])
             {
-                placementIndexOffset = (placementIndexOffset + 1) % (resultInterval + remainingOffset);
-                placementIndex = currentStartIndexDictionary[currentResult] + placementIndexOffset;
-                counter++;
-                if (counter > 50 || placementIndex >= 100)
+                if (placementIndexOffset == resultInterval + resultRemainFactor)
                 {
-                    Debug.LogError("percentage " + currentResult.percentage + " placement index: " + placementIndex + " i " + i);
-                    Debug.LogError(currentStartIndexDictionary[currentResult]);
-                    PrintResults();
-                    for (int k = 0; k < 100; k++)
-                    {
-                        var keyName = !resultOccupiedArray[k] ? "" : GetKeyName(sp.spinResultList[k]);
-                        Debug.Log(k + " " + resultOccupiedArray[k] + " " + keyName);
-                    }
-
-                    return;
+                    Debug.LogError("placement index " + placementIndex + " percentage " + currentResult.percentage);
+                    break;
                 }
+                placementIndexOffset++;
             }
-            
-            
-            sp.spinResultList[placementIndex] = currentResult;
-            resultOccupiedArray[placementIndex] = true;
-            currentStartIndexDictionary[currentResult] += resultInterval;
-            if (placementIndexOffset == resultInterval || 
-                remainFromDivide - remainingDictionary[GetKeyName(currentResult)] >= 
-                currentResult.percentage - resultAppearDictionary[currentResult])
+
+            resultOccupiedArray[placementIndex + placementIndexOffset] = true;
+            startIndexDictionary[currentResult] += resultInterval;
+            if ((placementIndexOffset == resultInterval + resultRemainFactor - 1 && resultRemainFactor == 1) ||
+                ((100 % currentResult.percentage) - remainExtensionCountDictionary[currentResult]) ==
+                (currentResult.percentage) - resultAppearCountDictionary[currentResult] && 
+                100 % currentResult.percentage != 0)
             {
-                currentStartIndexDictionary[currentResult]++;
-                remainingDictionary[GetKeyName(currentResult)]++;
+                //TODO not quite true for remaining system
+                startIndexDictionary[currentResult]++;
+                remainExtensionCountDictionary[currentResult]++;
             }
-            resultAppearDictionary[currentResult]++;
-//            Debug.Log(currentResult.key);
-            if (resultAppearDictionary[currentResult] == currentResult.percentage)
-            {
-                sortedResults.Remove(currentResult);
-            }
+            resultAppearCountDictionary[currentResult]++;
+            sp.spinResultList[placementIndex + placementIndexOffset] = currentResult;
+
         }
-        
-        
-        
+
+        _remainExtensionCountDictionary = remainExtensionCountDictionary;
     }
-    
-    public void GenerateSpinList()
-    {
-        sp.spinResultList = new SpinResult[100];
-        var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToArray();
-        bool[] resultOccupiedArray = new bool[100];
-
-        Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
-        foreach (var result in sortedResults)
-        {
-            resultAppearDictionary[result] = 0;
-        }
-
-        int resultCount = sortedResults.Length;
-        for (int i = 0; i < resultCount; i++)
-        {
-            var currentResult = sortedResults[i];
-            int resultInterval = 100 / currentResult.percentage;
-            int remainFromDivide = 100 - (resultInterval * currentResult.percentage);
-            int currentStartIndex = 0;
-            for (int j = 0; j < currentResult.percentage; j++)
-            {
-                //Debug.Log("current start index " + currentStartIndex);
-                int remainExtension = j >= remainFromDivide ? 0 : 1;
-
-                int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
-                //int placementIndex = j * resultInterval + randomPlacementIndexOffset;
-                int placementIndex = currentStartIndex + randomPlacementIndexOffset;
-                int counter = 0;
-
-                while (resultOccupiedArray[placementIndex])
-                {
-                    randomPlacementIndexOffset = (randomPlacementIndexOffset + 1) % (resultInterval + remainExtension); 
-                    placementIndex = currentStartIndex + randomPlacementIndexOffset;
-                    counter++;
-                    if (counter > 50)
-                    {
-                        Debug.LogError("percentage " + currentResult.percentage + " j: " + j);
-                        PrintResults();
-                        for (int k = 0; k < 100; k++)
-                        {
-                            var keyName = !resultOccupiedArray[k] ? "" : GetKeyName(sp.spinResultList[k]);
-                            Debug.Log(k + " " + resultOccupiedArray[k] + " " + keyName);
-                        }
-                        return;
-                    }
-                }
-
-                Debug.Log("placement Index " +placementIndex);
-                sp.spinResultList[placementIndex] = currentResult;
-                resultOccupiedArray[placementIndex] = true;
-                currentStartIndex += resultInterval + remainExtension;
-            }
-        }
-
-        
-        
-        
-        
-        /*for (int i = 0; i < 100; i++)
-        {
-            sortedResults = spinResults.OrderBy(result => resultAppearDictionary[result]).ToArray();
-            for (int j = 0; j < resultCount; j++)
-            {
-                var currentResult = sortedResults[j];
-                if(i < resultAppearDictionary[currentResult] * (100/currentResult.percentage)) continue;
-
-                sp.spinResultList[i] = currentResult;
-                resultAppearDictionary[currentResult]++;
-                break;
-            }
-        }*/
-    }
-    
     
     private void PrintResults()
     {
@@ -261,7 +175,7 @@ public class SpinResult
     public SpinType secondSpin;
     public SpinType thirdSpin;
     public string key;
-    [Range(1,50)]public int percentage;
+    [Range(1,100)]public int percentage;
 }
 
 [Serializable]

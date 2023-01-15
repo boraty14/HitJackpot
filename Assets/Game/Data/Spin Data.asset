@@ -18,20 +18,20 @@ MonoBehaviour:
     secondSpin: 1
     thirdSpin: 2
     key: A
-    percentage: 42
+    percentage: 50
   - firstSpin: 1
     secondSpin: 0
     thirdSpin: 2
     key: B
-    percentage: 28
+    percentage: 30
   - firstSpin: 1
     secondSpin: 1
     thirdSpin: 0
     key: C
-    percentage: 20
+    percentage: 15
   - firstSpin: 3
     secondSpin: 1
     thirdSpin: 2
     key: D
-    percentage: 10
+    percentage: 5
   spinIndex: 0
