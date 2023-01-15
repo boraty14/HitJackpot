@@ -1,4 +1,4 @@
-This project is developped according to given case instructions. You can play the game from
+This project is developed according to given case instructions. You can play the game from
 game scene. For visual part, you can click spin button to get a random spin animation between
 slow, normal and fast. You can set visual spinning settings from "Assets/Game/Data/Spin Settings.asset"
 Additionally, you can test a specific spin animation from GameScene hierarchy "UI/SlotModel/SlowWindow"
