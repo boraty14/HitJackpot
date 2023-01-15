@@ -12,16 +12,6 @@ public class SpinData : ScriptableObject
     public int spinIndex;
     private const string SaveKey = "SAVEKEY";
     public Dictionary<SpinResult, int> _remainExtensionCountDictionary;
-
-    private int GetLimitIndex(SpinResult spinResult,int totalAppear,int currentStartIndex)
-    {
-        int resultInterval = 100 / spinResult.percentage;
-        int remainFromDivide = 100 - (resultInterval * spinResult.percentage);
-        int remainExtension = totalAppear >= remainFromDivide ? 0 : 1; // >= ???
-
-        return currentStartIndex + resultInterval  -1 ;
-    }
-
     
     public void GenerateSpinListNew()
     {
@@ -65,6 +55,13 @@ public class SpinData : ScriptableObject
                     {
                         currentResult = comparingResult;
                     }
+
+                    else if(comparingResult.percentage == currentResult.percentage)
+                    {
+                        int randomSelectIndex = Random.Range(0, 2);
+                        if (randomSelectIndex == 1) currentResult = comparingResult;
+                    }
+                    
                 }
                 
                 if (startIndexDictionary[comparingResult] + comparingResultInterval + comparingResultRemainFactor <
@@ -82,17 +79,18 @@ public class SpinData : ScriptableObject
             var placementIndexOffset = 0;
             while (resultOccupiedArray[placementIndex + placementIndexOffset])
             {
-                if (placementIndexOffset == resultInterval + resultRemainFactor)
-                {
-                    Debug.LogError("placement index " + placementIndex + " percentage " + currentResult.percentage);
-                    break;
-                }
                 placementIndexOffset++;
+                if (placementIndex + placementIndexOffset >= 100)
+                {
+                    //SHOULD NOT REACH HERE BUT JUST IN CASE IF I MADE A MISTAKE
+                    Debug.LogError("placement index " + placementIndex + " percentage " + currentResult.percentage); 
+                    return;
+                }
             }
 
             resultOccupiedArray[placementIndex + placementIndexOffset] = true;
             startIndexDictionary[currentResult] += resultInterval;
-            if ((placementIndexOffset == resultInterval + resultRemainFactor - 1 && resultRemainFactor == 1) ||
+            if ((placementIndexOffset >= resultInterval + resultRemainFactor - 1 && resultRemainFactor == 1) ||
                 ((100 % currentResult.percentage) - remainExtensionCountDictionary[currentResult]) ==
                 (currentResult.percentage) - resultAppearCountDictionary[currentResult] && 
                 100 % currentResult.percentage != 0)
@@ -108,39 +106,11 @@ public class SpinData : ScriptableObject
 
         _remainExtensionCountDictionary = remainExtensionCountDictionary;
     }
-    
-    private void PrintResults()
-    {
-        Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
-        foreach (var spinResult in spinResults)
-        {
-            var keyName = GetKeyName(spinResult);
-            resultDictionary.Add(keyName,new List<int>());
-        }
-                
-        for (int i = 0; i < 100; i++)
-        {
-            if(sp.spinResultList[i] == null) continue;
-            resultDictionary[GetKeyName(sp.spinResultList[i])].Add(i);
-        }
-                
-        foreach (var spinResult in spinResults)
-        {
-            var keyName = GetKeyName(spinResult);
-            Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " + string.Join(", ",resultDictionary[keyName]));
-        }
-    }
-    
-    
-    private string GetKeyName(SpinResult spinResult)
-    {
-        return $"{spinResult.firstSpin}, {spinResult.secondSpin}, {spinResult.thirdSpin}";
-    }
 
     public SpinResult Spin()
     {
-        var result = sp.spinResultList[spinIndex % 100];
-        spinIndex++;
+        var result = sp.spinResultList[spinIndex];
+        spinIndex = (spinIndex + 1) % 100;
         return result;
     }
 
@@ -174,7 +144,6 @@ public class SpinResult
     public SpinType firstSpin;
     public SpinType secondSpin;
     public SpinType thirdSpin;
-    public string key;
     [Range(1,100)]public int percentage;
 }
 

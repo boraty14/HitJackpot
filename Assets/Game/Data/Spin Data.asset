@@ -17,21 +17,41 @@ MonoBehaviour:
   - firstSpin: 1
     secondSpin: 1
     thirdSpin: 2
-    key: A
-    percentage: 50
+    percentage: 13
   - firstSpin: 1
     secondSpin: 0
     thirdSpin: 2
-    key: B
-    percentage: 30
+    percentage: 13
   - firstSpin: 1
     secondSpin: 1
     thirdSpin: 0
-    key: C
-    percentage: 15
+    percentage: 13
   - firstSpin: 3
     secondSpin: 1
     thirdSpin: 2
-    key: D
+    percentage: 13
+  - firstSpin: 3
+    secondSpin: 1
+    thirdSpin: 0
+    percentage: 13
+  - firstSpin: 4
+    secondSpin: 4
+    thirdSpin: 4
+    percentage: 9
+  - firstSpin: 3
+    secondSpin: 3
+    thirdSpin: 3
+    percentage: 8
+  - firstSpin: 2
+    secondSpin: 2
+    thirdSpin: 2
+    percentage: 7
+  - firstSpin: 1
+    secondSpin: 1
+    thirdSpin: 1
+    percentage: 6
+  - firstSpin: 0
+    secondSpin: 0
+    thirdSpin: 0
     percentage: 5
   spinIndex: 0
