@@ -5,25 +5,25 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu]
-public class SpinData : ScriptableObject
+public class SpinGenerator : ScriptableObject
 {
     public SpinResultList sp;
-    public List<SpinResult> spinResults;
+    public List<SpinData> spinDataList;
     public int spinIndex;
     private const string SaveKey = "SAVEKEY";
-    public Dictionary<SpinResult, int> _remainExtensionCountDictionary;
+    public Dictionary<SpinData, int> _remainExtensionCountDictionary;
     
     public void GenerateSpinListNew()
     {
         sp.spinResultList = new SpinResult[100];
         bool[] resultOccupiedArray = new bool[100];
-        Dictionary<SpinResult, int> resultAppearCountDictionary = new Dictionary<SpinResult, int>();
-        Dictionary<SpinResult, int> remainExtensionCountDictionary = new Dictionary<SpinResult, int>();
-        Dictionary<SpinResult, int> startIndexDictionary = new Dictionary<SpinResult, int>();
+        Dictionary<SpinData, int> resultAppearCountDictionary = new Dictionary<SpinData, int>();
+        Dictionary<SpinData, int> remainExtensionCountDictionary = new Dictionary<SpinData, int>();
+        Dictionary<SpinData, int> startIndexDictionary = new Dictionary<SpinData, int>();
         
-        var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToList();
+        var sortedResults = spinDataList.OrderByDescending(result => result.percentage).ToList();
         //set dictionaries
-        foreach (var result in spinResults)
+        foreach (var result in spinDataList)
         { 
             resultAppearCountDictionary[result] = 0;
             startIndexDictionary[result] = 0;
@@ -100,7 +100,7 @@ public class SpinData : ScriptableObject
                 remainExtensionCountDictionary[currentResult]++;
             }
             resultAppearCountDictionary[currentResult]++;
-            sp.spinResultList[placementIndex + placementIndexOffset] = currentResult;
+            sp.spinResultList[placementIndex + placementIndexOffset] = currentResult.spinResult;
 
         }
 
@@ -123,7 +123,7 @@ public class SpinData : ScriptableObject
     {
         var spinSave = new SpinSave
         {
-            spinResults = this.spinResults,
+            spinResults = sp.spinResultList,
             spinIndex = this.spinIndex
         };
         ES3.Save<SpinSave>(SaveKey,spinSave);
@@ -133,18 +133,24 @@ public class SpinData : ScriptableObject
     {
         if (!ES3.KeyExists(SaveKey)) return;
         var savedSpinData = ES3.Load<SpinSave>(SaveKey);
-        spinResults = savedSpinData.spinResults;
+        sp.spinResultList = savedSpinData.spinResults;
         spinIndex = savedSpinData.spinIndex;
     }
 }
 
 [Serializable]
-public class SpinResult
+public class SpinData
+{
+    public SpinResult spinResult;
+    [Range(1,100)]public int percentage;
+}
+
+[Serializable]
+public struct SpinResult
 {
     public SpinType firstSpin;
     public SpinType secondSpin;
     public SpinType thirdSpin;
-    [Range(1,100)]public int percentage;
 }
 
 [Serializable]
@@ -160,6 +166,6 @@ public enum SpinType
 [Serializable]
 public class SpinSave
 {
-    public List<SpinResult> spinResults;
+    public SpinResult[] spinResults;
     public int spinIndex;
 }

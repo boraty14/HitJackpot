@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lean.Pool;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SlotController : MonoBehaviour
 {
     [SerializeField] private List<Slot> _slots;
-    [SerializeField] private SpinData _spinData;
+    [SerializeField] private SpinGenerator spinGenerator;
     [SerializeField] private SpinSettings _spinSettings;
     [SerializeField] private CoinEffect _coinEffectPrefab;
     [SerializeField] private Transform _coinEffectTransform;
@@ -58,7 +59,7 @@ public class SlotController : MonoBehaviour
 
     private async Task<SpinResult> SpinDefault()
     {
-        var spinResult = _spinData.Spin();
+        var spinResult = spinGenerator.Spin();
         Debug.Log(spinResult.firstSpin + " " + spinResult.secondSpin + " " + spinResult.thirdSpin);
         _ = _slots[0].SpinDefaultSlotToState(spinResult.firstSpin,_spinSettings.DefaultSpinTurnCount);
         _ = _slots[1].SpinDefaultSlotToState(spinResult.secondSpin,_spinSettings.DefaultSpinTurnCount + _spinSettings.DefaultSpinTurnOffset);

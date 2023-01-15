@@ -762,7 +762,7 @@ MonoBehaviour:
   - {fileID: 578739136}
   - {fileID: 1790147185}
   - {fileID: 1532774723}
-  _spinData: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  spinGenerator: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
   _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
   _coinEffectPrefab: {fileID: 409263692995244812, guid: 2648b269916107146b91c8214317360b,
     type: 3}

@@ -3,47 +3,47 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(SpinData))]
+[CustomEditor(typeof(SpinGenerator))]
 public class SpinDataEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        SpinData spinData = (SpinData)target;
+        SpinGenerator spinGenerator = (SpinGenerator)target;
 
         if (GUILayout.Button("Generate Spin Result List"))
         {
-            spinData.GenerateSpinListNew();
-            PrintResultList(spinData);
+            spinGenerator.GenerateSpinListNew();
+            PrintResultList(spinGenerator);
         }
 
 
         if (GUILayout.Button("Reset States"))
         {
-            spinData.ResetSpinIndex();
+            spinGenerator.ResetSpinIndex();
         }
     }
 
-    private void PrintResultList(SpinData spinData)
+    private void PrintResultList(SpinGenerator spinGenerator)
     {
         Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
-        foreach (var spinResult in spinData.spinResults)
+        foreach (var spinData in spinGenerator.spinDataList)
         {
-            var keyName = GetKeyName(spinResult);
+            var keyName = GetKeyName(spinData.spinResult);
             resultDictionary.Add(keyName, new List<int>());
         }
 
         for (int i = 0; i < 100; i++)
         {
-            resultDictionary[GetKeyName(spinData.sp.spinResultList[i])].Add(i);
+            resultDictionary[GetKeyName(spinGenerator.sp.spinResultList[i])].Add(i);
         }
 
-        foreach (var spinResult in spinData.spinResults)
+        foreach (var spinData in spinGenerator.spinDataList)
         {
-            var keyName = GetKeyName(spinResult);
-            Debug.Log(keyName + " | | percentage " + spinResult.percentage + " | |  " +
+            var keyName = GetKeyName(spinData.spinResult);
+            Debug.Log(keyName + " | | percentage " + spinData.percentage + " | |  " +
                       string.Join(", ", resultDictionary[keyName]) + " count: " + resultDictionary[keyName].Count +
-                      " remain : " + spinData._remainExtensionCountDictionary[spinResult]);
+                      " remain : " + spinGenerator._remainExtensionCountDictionary[spinData]);
         }
     }
 
