@@ -7,9 +7,9 @@ using Random = UnityEngine.Random;
 [CreateAssetMenu]
 public class SpinGenerator : ScriptableObject
 {
-    public SpinResultList sp;
+    public SpinResultList spinResultList;
     public List<SpinData> spinDataList;
-    public int spinIndex;
+    [HideInInspector] public int spinIndex;
     private const string SaveKey = "SAVEKEY";
     public Dictionary<SpinData, int> _remainExtensionCountDictionary;
     
@@ -17,7 +17,7 @@ public class SpinGenerator : ScriptableObject
     {
         ES3.DeleteKey(SaveKey);
         spinIndex = 0;
-        sp.spinResultList = new SpinResult[100];
+        spinResultList.Value = new SpinResult[100];
         bool[] resultOccupiedArray = new bool[100];
         Dictionary<SpinData, int> resultAppearCountDictionary = new Dictionary<SpinData, int>();
         Dictionary<SpinData, int> remainExtensionCountDictionary = new Dictionary<SpinData, int>();
@@ -97,12 +97,11 @@ public class SpinGenerator : ScriptableObject
                 (currentResult.percentage) - resultAppearCountDictionary[currentResult] && 
                 100 % currentResult.percentage != 0)
             {
-                //TODO not quite true for remaining system
                 startIndexDictionary[currentResult]++;
                 remainExtensionCountDictionary[currentResult]++;
             }
             resultAppearCountDictionary[currentResult]++;
-            sp.spinResultList[placementIndex + placementIndexOffset] = currentResult.spinResult;
+            spinResultList.Value[placementIndex + placementIndexOffset] = currentResult.spinResult;
 
         }
 
@@ -111,7 +110,7 @@ public class SpinGenerator : ScriptableObject
 
     public SpinResult Spin()
     {
-        var result = sp.spinResultList[spinIndex];
+        var result = spinResultList.Value[spinIndex];
         spinIndex = (spinIndex + 1) % 100;
         return result;
     }
@@ -119,7 +118,7 @@ public class SpinGenerator : ScriptableObject
     public void ResetStates()
     {
         ES3.DeleteKey(SaveKey);
-        sp.spinResultList = null;
+        spinResultList.Value = null;
         spinIndex = 0;
     }
 
@@ -127,7 +126,7 @@ public class SpinGenerator : ScriptableObject
     {
         var spinSave = new SpinSave
         {
-            spinResults = sp.spinResultList,
+            spinResults = spinResultList.Value,
             spinIndex = this.spinIndex
         };
         ES3.Save<SpinSave>(SaveKey,spinSave);
@@ -138,10 +137,10 @@ public class SpinGenerator : ScriptableObject
         if (ES3.KeyExists(SaveKey))
         {
             var savedSpinData = ES3.Load<SpinSave>(SaveKey);
-            sp.spinResultList = savedSpinData.spinResults;
+            spinResultList.Value = savedSpinData.spinResults;
             spinIndex = savedSpinData.spinIndex;
         }
-        else if (sp.spinResultList == null || sp.spinResultList.Length == 0)
+        else if (spinResultList.Value == null || spinResultList.Value.Length == 0)
         {
             GenerateSpinListNew();        
         }

@@ -35,7 +35,7 @@ public class SpinDataEditor : Editor
 
         for (int i = 0; i < 100; i++)
         {
-            resultDictionary[GetKeyName(spinGenerator.sp.spinResultList[i])].Add(i);
+            resultDictionary[GetKeyName(spinGenerator.spinResultList.Value[i])].Add(i);
         }
 
         foreach (var spinData in spinGenerator.spinDataList)
