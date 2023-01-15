@@ -15,7 +15,7 @@ public class SpinData : ScriptableObject
     {
         int resultInterval = 100 / spinResult.percentage;
         int remainFromDivide = 100 - (resultInterval * spinResult.percentage);
-        int remainExtension = totalAppear >= spinResult.percentage - remainFromDivide ? 1 : 0; // >= ???
+        int remainExtension = totalAppear >= remainFromDivide ? 0 : 1; // >= ???
 
         return currentStartIndex + resultInterval + remainExtension -1 ;
     }
@@ -52,9 +52,10 @@ public class SpinData : ScriptableObject
             int resultInterval = 100 / currentResult.percentage;
             int remainFromDivide = 100 - (resultInterval * currentResult.percentage);
             //int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
-            int remainExtension = resultAppearDictionary[currentResult] >= currentResult.percentage - remainFromDivide ? 1 : 0;
+            int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
             
-            int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
+            //int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
+            int randomPlacementIndexOffset = 0;
             int placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
 
             int counter = 0;
@@ -83,6 +84,7 @@ public class SpinData : ScriptableObject
             resultOccupiedArray[placementIndex] = true;
             currentStartIndexDictionary[currentResult] += resultInterval + remainExtension;
             resultAppearDictionary[currentResult] = resultAppearDictionary[currentResult] + 1;
+            Debug.Log(currentResult.key);
             if (resultAppearDictionary[currentResult] == currentResult.percentage)
             {
                 sortedResults.Remove(currentResult);
@@ -232,6 +234,7 @@ public class SpinResult
     public SpinType firstSpin;
     public SpinType secondSpin;
     public SpinType thirdSpin;
+    public string key;
     [Range(1,50)]public int percentage;
 }
 
