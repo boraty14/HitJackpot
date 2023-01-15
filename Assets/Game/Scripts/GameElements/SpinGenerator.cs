@@ -12,11 +12,14 @@ namespace Game.Scripts.GameElements
         public SpinResultList spinResultList;
         public List<SpinData> spinDataList;
         [HideInInspector] public int spinIndex;
-        public Dictionary<SpinData, int> RemainExtensionCountDictionary => _remainExtensionCountDictionary;
         private Dictionary<SpinData, int> _resultAppearCountDictionary;
         private Dictionary<SpinData, int> _remainExtensionCountDictionary;
         private Dictionary<SpinData, int> _startIndexDictionary;
+        private Dictionary<SpinData, List<Vector2Int>> _intervalListDictionary;
         private const string SaveKey = "SAVEKEY";
+
+        public Dictionary<SpinData, int> GetRemainExtensionCountDictionary() => _remainExtensionCountDictionary;
+        public Dictionary<SpinData, List<Vector2Int>> GetIntervalListDictionary() => _intervalListDictionary;
 
         public void GenerateSpinListNew()
         {
@@ -30,14 +33,19 @@ namespace Game.Scripts.GameElements
             //remain ext dictionary is for selecting the intervals more precisely.
             //For example if we have a %13 probability, 9 interval will be 8 element long and 4 interval
             // will be 7 element long. This dictionary holds how many times a spin result is increased its
-            // interval by 1.
+            // interval by 1. Also in general reason we have multiple dictionaries is printing a detailed console
+            // log and test the algorithm easily. We print each interval of result, their appearing indices, appear count,
+            // and remainder count to see how many times we extend the intervals. It makes it really easy to see if
+            // anything is wrong with the algorithm.
             _remainExtensionCountDictionary = new Dictionary<SpinData, int>();
             _startIndexDictionary = new Dictionary<SpinData, int>();
+            _intervalListDictionary = new Dictionary<SpinData, List<Vector2Int>>();
             foreach (var result in spinDataList)
             {
                 _resultAppearCountDictionary[result] = 0;
                 _startIndexDictionary[result] = 0;
                 _remainExtensionCountDictionary[result] = 0;
+                _intervalListDictionary[result] = new List<Vector2Int>();
             }
 
 
@@ -105,6 +113,7 @@ namespace Game.Scripts.GameElements
 
                 // set the result and update dictionaries
                 resultOccupiedArray[placementIndex + placementIndexOffset] = true;
+                Vector2Int intervalVector = new Vector2Int(_startIndexDictionary[currentSpinData], 0);
                 _startIndexDictionary[currentSpinData] += resultInterval;
                 
                 // what I check here is if I had to extend interval to find an available index for placement, or
@@ -119,9 +128,18 @@ namespace Game.Scripts.GameElements
                     _remainExtensionCountDictionary[currentSpinData]++;
                 }
 
+                intervalVector.y = _startIndexDictionary[currentSpinData]-1;
                 _resultAppearCountDictionary[currentSpinData]++;
+                _intervalListDictionary[currentSpinData].Add(intervalVector);
                 spinResultList.Value[placementIndex + placementIndexOffset] = currentSpinData.spinResult;
             }
+            
+            //In short this algorithm works perfectly for given probabilities in case, all %13 results shared in their
+            // 9 interval by 8 length and 4 interval by 7 length (also correction is 9x8 + 7x4 = 100)
+            // (though the percentages are the same, they dont share exact same 9 interval by 8 length. Some can
+            // go like 0-6, 7-14 and other is 0-7, 8-14 and so on. For the case and given results and percentages, algorithm
+            // distributes perfectly each result. Though in other experiments, when I try the algorithm with less result count
+            // and higher percentages, -for example 50,35,15,5- I observed 
 
             // Note: In general code should not contain this much comment and explain itself and be a bit cleaner maybe.
             // But this function in the whole project represents the algorithm used for probability distribution and

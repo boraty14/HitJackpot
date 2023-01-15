@@ -38,12 +38,15 @@ public class SpinDataEditor : Editor
             resultDictionary[GetKeyName(spinGenerator.spinResultList.Value[i])].Add(i);
         }
 
+        var remainExtensionCountDictionary = spinGenerator.GetRemainExtensionCountDictionary();
+        var intervalListDictionary = spinGenerator.GetIntervalListDictionary();
         foreach (var spinData in spinGenerator.spinDataList)
         {
             var keyName = GetKeyName(spinData.spinResult);
             Debug.Log(keyName + " | | percentage " + spinData.percentage + " | |  " +
                       string.Join(", ", resultDictionary[keyName]) + " count: " + resultDictionary[keyName].Count +
-                      " remain : " + spinGenerator.RemainExtensionCountDictionary[spinData]);
+                      " remain : " + remainExtensionCountDictionary[spinData]);
+            Debug.Log("Interval: " + string.Join(", ", intervalListDictionary[spinData]));
         }
     }
 
