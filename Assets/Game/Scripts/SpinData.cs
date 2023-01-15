@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu]
 public class SpinData : ScriptableObject
@@ -42,8 +43,18 @@ public class SpinData : ScriptableObject
             SpinResult currentResult = sortedResults[0];
             for (int j = 1; j < sortedResults.Count; j++)
             {
-                if (GetLimitIndex(sortedResults[j],resultAppearDictionary[sortedResults[j]],currentStartIndexDictionary[sortedResults[j]])
-                    < GetLimitIndex(currentResult,resultAppearDictionary[currentResult],currentStartIndexDictionary[currentResult]))
+                var sortedIndex = GetLimitIndex(sortedResults[j], resultAppearDictionary[sortedResults[j]],
+                    currentStartIndexDictionary[sortedResults[j]]);
+                var currentIndex = GetLimitIndex(currentResult, resultAppearDictionary[currentResult],
+                    currentStartIndexDictionary[currentResult]);
+
+                if (sortedIndex == currentIndex)
+                {
+                    var randomSelectIndex = Random.Range(0, 2);
+                    currentResult = randomSelectIndex == 0 ? currentResult : sortedResults[j];
+                }
+                
+                else if (sortedIndex <= currentIndex)
                 {
                     currentResult = sortedResults[j];
                 }
@@ -54,15 +65,15 @@ public class SpinData : ScriptableObject
             //int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
             int remainExtension = resultAppearDictionary[currentResult] >= remainFromDivide ? 0 : 1;
             
-            //int randomPlacementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
-            int randomPlacementIndexOffset = 0;
-            int placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
+            //int placementIndexOffset = UnityEngine.Random.Range(0, resultInterval + remainExtension);
+            int placementIndexOffset = 0;
+            int placementIndex = currentStartIndexDictionary[currentResult] + placementIndexOffset;
 
             int counter = 0;
             while (resultOccupiedArray[placementIndex])
             {
-                randomPlacementIndexOffset = (randomPlacementIndexOffset + 1) % (resultInterval + remainExtension);
-                placementIndex = currentStartIndexDictionary[currentResult] + randomPlacementIndexOffset;
+                placementIndexOffset = (placementIndexOffset + 1) % (resultInterval + remainExtension);
+                placementIndex = currentStartIndexDictionary[currentResult] + placementIndexOffset;
                 counter++;
                 if (counter > 50 || placementIndex >= 100)
                 {
@@ -84,7 +95,7 @@ public class SpinData : ScriptableObject
             resultOccupiedArray[placementIndex] = true;
             currentStartIndexDictionary[currentResult] += resultInterval + remainExtension;
             resultAppearDictionary[currentResult] = resultAppearDictionary[currentResult] + 1;
-            Debug.Log(currentResult.key);
+//            Debug.Log(currentResult.key);
             if (resultAppearDictionary[currentResult] == currentResult.percentage)
             {
                 sortedResults.Remove(currentResult);
