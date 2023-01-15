@@ -11,6 +11,7 @@ public class SpinData : ScriptableObject
     public List<SpinResult> spinResults;
     public int spinIndex;
     private const string SaveKey = "SAVEKEY";
+    public Dictionary<string, int> remainingDictionary;
 
     private int GetLimitIndex(SpinResult spinResult,int totalAppear,int currentStartIndex)
     {
@@ -28,12 +29,14 @@ public class SpinData : ScriptableObject
         bool[] resultOccupiedArray = new bool[100];
         Dictionary<SpinResult, int> resultAppearDictionary = new Dictionary<SpinResult, int>();
         Dictionary<SpinResult, int> currentStartIndexDictionary = new Dictionary<SpinResult, int>();
+        remainingDictionary = new Dictionary<string, int>();
         var sortedResults = spinResults.OrderByDescending(result => result.percentage).ToList();
         //set dictionaries
         foreach (var result in spinResults)
         { 
             resultAppearDictionary[result] = 0;
             currentStartIndexDictionary[result] = 0;
+            remainingDictionary[GetKeyName(result)] = 0;
         }
 
 
@@ -99,7 +102,13 @@ public class SpinData : ScriptableObject
             sp.spinResultList[placementIndex] = currentResult;
             resultOccupiedArray[placementIndex] = true;
             currentStartIndexDictionary[currentResult] += resultInterval;
-            if (placementIndexOffset == resultInterval) currentStartIndexDictionary[currentResult]++;
+            if (placementIndexOffset == resultInterval || 
+                remainFromDivide - remainingDictionary[GetKeyName(currentResult)] >= 
+                currentResult.percentage - resultAppearDictionary[currentResult])
+            {
+                currentStartIndexDictionary[currentResult]++;
+                remainingDictionary[GetKeyName(currentResult)]++;
+            }
             resultAppearDictionary[currentResult]++;
 //            Debug.Log(currentResult.key);
             if (resultAppearDictionary[currentResult] == currentResult.percentage)
