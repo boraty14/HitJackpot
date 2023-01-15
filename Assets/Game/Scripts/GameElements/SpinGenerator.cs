@@ -47,8 +47,9 @@ namespace Game.Scripts.GameElements
                 // so basically this part is for selecting spin with the minimum interval limit.
                 // According to their appearance count and last interval start index, which both
                 // hold in dictionaries, I select the interval with minimal upper limit. For example
-                // we can have possibilities that should appear between 17-33, 20-39,24-29 ...
+                // we can have possibilities that should appear between 17-33, 20-39, 30-39, 24-29 ...
                 // In these intervals we chose the last one, 24-29 because it needs to placed sooner than others.
+                // We can decide it by checking its intervals limit index. It has the smallest index.
                 // After placing it, we increase its startIndex, appear count and remainderExtension count if we extended
                 // its interval by 1, according to its remainder after division with 100.
                 // The point is for probabilities that have remainder after dividing 100, not all the intervals are same.
@@ -93,13 +94,13 @@ namespace Game.Scripts.GameElements
                 int placementIndexOffset = 0;
                 while (resultOccupiedArray[placementIndex + placementIndexOffset])
                 {
+                    // so a quick note this one looks like a good candidate for out of range exception
+                    // in the while check but actually it is not. Since after checking interval upper limit,
+                    // we place the result in the first available index, algorithm first places the empty indices from
+                    // the start, (not in a perfect manner like from 0-1-2...99) but once an interval upper limit hits 99,
+                    // it will never be called again and other spin results will be placed to empty places before the
+                    // last placed index. Therefore before while check index becomes 100, it will be placed for sure.
                     placementIndexOffset++;
-                    if (placementIndex + placementIndexOffset >= 100)
-                    {
-                        // SHOULD NOT REACH HERE BUT JUST IN CASE IF I MADE A MISTAKE
-                        Debug.LogError("placement index " + placementIndex + " percentage " + currentSpinData.percentage);
-                        return;
-                    }
                 }
 
                 // set the result and update dictionaries
@@ -122,7 +123,7 @@ namespace Game.Scripts.GameElements
                 spinResultList.Value[placementIndex + placementIndexOffset] = currentSpinData.spinResult;
             }
 
-            // Note: In general code should not contain this much comment and explain itself and a bit cleaner maybe.
+            // Note: In general code should not contain this much comment and explain itself and be a bit cleaner maybe.
             // But this function in the whole project represents the algorithm used for probability distribution and
             // it needs explaining. Optimization can be made but since the system itself does not trigger on the
             // gameplay spinning and sets before game starts, I think it is acceptable. Also, other than
