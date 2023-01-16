@@ -78,6 +78,10 @@ namespace Game.Scripts.GameElements
                         {
                             currentSpinData = comparingSpinData;
                         }
+                        else if (comparingSpinData.percentage < currentSpinData.percentage)
+                        {
+                            currentSpinData = comparingSpinData;
+                        }
 
                         //add randomness for the same weighted probabilities
                         else if (comparingSpinData.percentage == currentSpinData.percentage)
@@ -134,12 +138,23 @@ namespace Game.Scripts.GameElements
                 spinResultList.Value[placementIndex + placementIndexOffset] = currentSpinData.spinResult;
             }
             
-            //In short this algorithm works perfectly for given probabilities in case, all %13 results shared in their
+            // In short this algorithm works perfectly for the given probabilities in the case, all %13 results shared in their
             // 9 interval by 8 length and 4 interval by 7 length (also correction is 9x8 + 7x4 = 100)
-            // (though the percentages are the same, they dont share exact same 9 interval by 8 length. Some can
-            // go like 0-6, 7-14 and other is 0-7, 8-14 and so on. For the case and given results and percentages, algorithm
+            // This applies for all the other results. For the given results and percentages in the case, algorithm
             // distributes perfectly each result. Though in other experiments, when I try the algorithm with less result count
-            // and higher percentages, -for example 50,35,15,5- I observed 
+            // and higher percentages, -for example 50,35,10,5- or with an extreme example like 94,2,2,2 I observed algorithm
+            // can extend some intervals by 2, instead of 1. Result count is still perfect but distribution becomes almost perfect.
+            // This basically happens because algorithm checks for the result that should be placed most early. Since
+            // extreme percentages more than 50, are almost always need to be placed first, this can cause stacking for
+            // other possibilities. Especially when you have a case like 94,2,2,2. Since %94 is almost always prior, and also
+            // the other 3 have the same percentages, in the check point they cause stacking and one of them misses its first interval
+            // by 1. This can be fixed by optimizing the algorithm to check such stackings for extreme cases and percentages.
+            // Other than that, I tried the algorithm for many cases. Apart from the ones
+            // I mentioned, for every other possibilities I observed perfect distribution in the intervals. Though
+            // in the given extreme examples, 1-2 interval have offset by +-1 for mentioned stacking conditions,
+            // other than that they work as expected.
+            // I wanted to write this comment to explain clearly how algorithm works, and also to let you know that I am
+            // aware of the little flaw for extreme cases, though I could not figure out a rational way to eliminate it at the moment.
 
             // Note: In general code should not contain this much comment and explain itself and be a bit cleaner maybe.
             // But this function in the whole project represents the algorithm used for probability distribution and
