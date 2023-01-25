@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 namespace Game.Scripts.GameElements
@@ -7,11 +8,14 @@ namespace Game.Scripts.GameElements
     {
         [SerializeField] private Button _spinButton;
         [SerializeField] private SlotController _slotController;
-    
+        [SerializeField] private SpriteAtlas _slotModelAtlas;
+        [SerializeField] private Image _spinButtonImage;
+        
         private void OnEnable()
         {
             _spinButton.onClick.AddListener(OnSpinClick);
             _slotController.OnSpinStateChange += OnSpinStateChange;
+            _spinButtonImage.sprite = _slotModelAtlas.GetSprite("Spin_button");
         }
 
         private void OnDisable()

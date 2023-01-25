@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: IconAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: f0ec793b57cc5fa49b2ed21dbb42f46d, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 30a596014db884f46b0530e2d44c7b21, type: 3}
+  - {fileID: 21300000, guid: e9af7f6112cd5684497368c47ffff1b0, type: 3}
+  - {fileID: 21300000, guid: aed1e353f6ea3cf45bbaec3372fe9f5e, type: 3}
+  - {fileID: 21300000, guid: 1c9fe325dbbcd5946baa4cb032ce36bb, type: 3}
+  - {fileID: 21300000, guid: 3f26eca6e20eed14d9dc01f1e795dde9, type: 3}
+  - {fileID: 21300000, guid: 11eb3717b3e7f5d40a400b4b9140bec2, type: 3}
+  - {fileID: 21300000, guid: 780c67774cb095744b78dabbc26e3175, type: 3}
+  - {fileID: 21300000, guid: 919f3ee705a5f8242945664bb7f62d02, type: 3}
+  - {fileID: 21300000, guid: 6b82133ddd9be7e4c92d0dbb2742ed62, type: 3}
+  - {fileID: 21300000, guid: fc8e6bcf5d437e643a695e69d875346e, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Bonus_00
+  - Jackpot_00
+  - Seven_00_blur
+  - Jackpot_00_blur
+  - A_00_blur
+  - Wild_00_blur
+  - Seven_00
+  - Wild_00
+  - A_00
+  - Bonus_00_blur
+  m_RenderDataMap: {}
+  m_Tag: IconAtlas
+  m_IsVariant: 0
