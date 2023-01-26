@@ -25,7 +25,6 @@ namespace Game.Scripts.GameElements
         private void SetSlotItems()
         {
             _slotRollEndHeight = _slotItems.Count % 2 == 0 ? -SlotItemHeight / 2f : 0f;
-            Debug.Log(_slotRollEndHeight);
             transform.localPosition = new Vector3(transform.localPosition.x, _slotRollEndHeight,0f);
             _currentSlotItemIndex = (_slotItems.Count - 1) / 2;
 
