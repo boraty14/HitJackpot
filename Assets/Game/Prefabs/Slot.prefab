@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 2775843247043374074, guid: 6aa866ec79b4ef64e89516b6299782c3,
         type: 3}
       propertyPath: _blurImageName
-      value: Jackpot_00_Blur
+      value: Jackpot_00_blur
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aa866ec79b4ef64e89516b6299782c3, type: 3}
@@ -233,7 +233,7 @@ PrefabInstance:
     - target: {fileID: 2775843247043374074, guid: 6aa866ec79b4ef64e89516b6299782c3,
         type: 3}
       propertyPath: _blurImageName
-      value: A_00_Blur
+      value: A_00_blur
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aa866ec79b4ef64e89516b6299782c3, type: 3}
@@ -335,7 +335,7 @@ PrefabInstance:
     - target: {fileID: 2775843247043374074, guid: 6aa866ec79b4ef64e89516b6299782c3,
         type: 3}
       propertyPath: _blurImageName
-      value: Wild_00_Blur
+      value: Wild_00_blur
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aa866ec79b4ef64e89516b6299782c3, type: 3}
@@ -437,7 +437,7 @@ PrefabInstance:
     - target: {fileID: 2775843247043374074, guid: 6aa866ec79b4ef64e89516b6299782c3,
         type: 3}
       propertyPath: _blurImageName
-      value: Bonus_00_Blur
+      value: Bonus_00_blur
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aa866ec79b4ef64e89516b6299782c3, type: 3}
@@ -539,7 +539,7 @@ PrefabInstance:
     - target: {fileID: 2775843247043374074, guid: 6aa866ec79b4ef64e89516b6299782c3,
         type: 3}
       propertyPath: _blurImageName
-      value: Seven_00_Blur
+      value: Seven_00_blur
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aa866ec79b4ef64e89516b6299782c3, type: 3}

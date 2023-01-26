@@ -18,7 +18,7 @@ namespace Game.Scripts.GameElements
         public void Initialize()
         {
             SetSlotItems();
-            //RandomizeSlotAtStart();
+            RandomizeSlotAtStart();
             SetSlotItemImages(true);
         }
 
@@ -84,14 +84,21 @@ namespace Game.Scripts.GameElements
 
         private void MoveLastSlotItemUp()
         {
+            var slotItemCount = transform.childCount;
+            for (int i = 0; i < slotItemCount; i++)
+            {
+                var factor = i == slotItemCount - 1 ? slotItemCount - 1 : -1;
+                transform.GetChild(i).localPosition += factor * SlotItemHeight * Vector3.up;
+            }
+            
             var lastTransform = transform.GetChild(_slotItems.Count - 1);
             lastTransform.SetSiblingIndex(0);
             SetSlotItemIndex();
-            lastTransform.localPosition += (_slotItems.Count - 1) * SlotItemHeight * Vector3.up;
-            for (int i = 0; i < transform.childCount-1; i++)
-            {
-                //transform.GetChild(i).localPosition -= SlotItemHeight
-            }
+            // lastTransform.localPosition += (_slotItems.Count - 1) * SlotItemHeight * Vector3.up;
+            // for (int i = 0; i < transform.childCount-1; i++)
+            // {
+            //     transform.GetChild(i).localPosition -= SlotItemHeight * Vector3.up;
+            // }
         }
 
         private void SetSlotItemIndex()
