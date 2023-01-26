@@ -3,31 +3,32 @@ using Game.Scripts.Spin;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(SpinGenerator))]
+[CustomEditor(typeof(SpinDataHolder))]
 public class SpinDataEditor : Editor
 {
-    public override void OnInspectorGUI()
+    /*public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        SpinGenerator spinGenerator = (SpinGenerator)target;
+        SpinDataHolder spinDataHolder = (SpinDataHolder)target;
 
         if (GUILayout.Button("Generate Spin Result List"))
         {
+            var spinGenerator = new SpinGenerator(spinDataHolder);
             spinGenerator.GenerateSpinListNew();
-            PrintResultList(spinGenerator);
+            PrintResultList(spinDataHolder);
         }
 
 
         if (GUILayout.Button("Reset States"))
         {
-            spinGenerator.ResetStates();
+            spinDataHolder.ResetStates();
         }
     }
 
-    private void PrintResultList(SpinGenerator spinGenerator)
+    private void PrintResultList(SpinDataHolder spinDataHolder)
     {
         Dictionary<string, List<int>> resultDictionary = new Dictionary<string, List<int>>();
-        foreach (var spinData in spinGenerator.spinDataList)
+        foreach (var spinData in spinDataHolder.spinDataList)
         {
             var keyName = GetKeyName(spinData.spinResult);
             resultDictionary.Add(keyName, new List<int>());
@@ -35,12 +36,12 @@ public class SpinDataEditor : Editor
 
         for (int i = 0; i < 100; i++)
         {
-            resultDictionary[GetKeyName(spinGenerator.spinResultList.Value[i])].Add(i);
+            resultDictionary[GetKeyName(spinDataHolder.spinResultList.Value[i])].Add(i);
         }
 
-        var remainExtensionCountDictionary = spinGenerator.GetRemainExtensionCountDictionary();
-        var intervalListDictionary = spinGenerator.GetIntervalListDictionary();
-        foreach (var spinData in spinGenerator.spinDataList)
+        var remainExtensionCountDictionary = spinDataHolder.GetRemainExtensionCountDictionary();
+        var intervalListDictionary = spinDataHolder.GetIntervalListDictionary();
+        foreach (var spinData in spinDataHolder.spinDataList)
         {
             var keyName = GetKeyName(spinData.spinResult);
             Debug.Log(keyName + " | | percentage " + spinData.percentage + " | |  " +
@@ -53,5 +54,5 @@ public class SpinDataEditor : Editor
     private string GetKeyName(SpinResult spinResult)
     {
         return $"{spinResult.firstSpin}, {spinResult.secondSpin}, {spinResult.thirdSpin}";
-    }
+    }*/
 }

@@ -39,6 +39,9 @@ MonoBehaviour:
     - PPv2URPConverters
     - Spin
     - SpinEditor
+    - VContainer
+    - VContainer.Editor
+    - VContainer.EnableCodeGen
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

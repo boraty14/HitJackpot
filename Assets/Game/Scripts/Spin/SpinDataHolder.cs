@@ -1,8 +1,22 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 namespace Game.Scripts.Spin
 {
+    [CreateAssetMenu]
+    public class SpinDataHolder : ScriptableObject
+    {
+        public int TryMe = 1;
+        public SpinResultList spinResultList;
+        public List<SpinData> spinDataList;
+        [HideInInspector] public int spinIndex;
+        public Action onResetState;
+    }
+
     [Serializable]
     public class SpinData
     {

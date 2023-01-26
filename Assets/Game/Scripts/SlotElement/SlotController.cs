@@ -11,7 +11,7 @@ namespace Game.Scripts.SlotElement
     public class SlotController : MonoBehaviour
     {
         [SerializeField] private List<Slot> _slots;
-        [SerializeField] private SpinGenerator spinGenerator;
+        [SerializeField] private SpinDataHolder _spinDataHolder;
         [SerializeField] private SpinSettings _spinSettings;
         [SerializeField] private CoinEffect _coinEffectPrefab;
         [SerializeField] private Transform _coinEffectTransform;
@@ -62,9 +62,9 @@ namespace Game.Scripts.SlotElement
 
         private async Task<SpinResult> SpinDefault()
         {
-            var spinResult = spinGenerator.Spin();
+            var spinResult = _spinDataHolder.Spin();
             Debug.Log(spinResult.firstSpin + " " + spinResult.secondSpin + " " + spinResult.thirdSpin +
-                      " spin index: " + (spinGenerator.spinIndex - 1));
+                      " spin index: " + (_spinDataHolder.spinIndex - 1));
             Task firstSpin = _slots[0].SpinDefaultSlotToState(spinResult.firstSpin, _spinSettings.DefaultSpinTurnCount);
             Task secondSpin = _slots[1].SpinDefaultSlotToState(spinResult.secondSpin,
                 _spinSettings.DefaultSpinTurnCount + _spinSettings.DefaultSpinTurnOffset);

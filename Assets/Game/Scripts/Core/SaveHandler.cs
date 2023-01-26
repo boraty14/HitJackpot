@@ -1,23 +1,24 @@
 using Game.Scripts.Spin;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Scripts.Core
 {
     public class SaveHandler : MonoBehaviour
     {
-        [SerializeField] private SpinGenerator _spinGenerator;
+        [SerializeField] private SpinDataHolder _spinDataHolder;
         [SerializeField] private SpinResultList _spinResultList;
         private const string SaveKey = "SAVEKEY";
 
         private void OnEnable()
         {
-            _spinGenerator.onResetState += SpinGenerator_OnResetState;
+            _spinDataHolder.onResetState += SpinGenerator_OnResetState;
             LoadSpinData();
         }
 
         private void OnDisable()
         {
-            _spinGenerator.onResetState -= SpinGenerator_OnResetState;
+            _spinDataHolder.onResetState -= SpinGenerator_OnResetState;
         }
 
         private void OnApplicationPause(bool pauseStatus)
@@ -40,7 +41,7 @@ namespace Game.Scripts.Core
             var spinSave = new SpinSave
             {
                 spinResults = _spinResultList.Value,
-                spinIndex = _spinGenerator.spinIndex
+                spinIndex = _spinDataHolder.spinIndex
             };
             ES3.Save<SpinSave>(SaveKey, spinSave);
         }
@@ -51,11 +52,11 @@ namespace Game.Scripts.Core
             {
                 var savedSpinData = ES3.Load<SpinSave>(SaveKey);
                 _spinResultList.Value = savedSpinData.spinResults;
-                _spinGenerator.spinIndex = savedSpinData.spinIndex;
+                _spinDataHolder.spinIndex = savedSpinData.spinIndex;
             }
             else
             {
-                _spinGenerator.GenerateSpinListNew();
+                _spinDataHolder.GenerateSpinListNew();
             }
         }
     }

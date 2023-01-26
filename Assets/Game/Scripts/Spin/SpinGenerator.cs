@@ -4,31 +4,32 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
 namespace Game.Scripts.Spin
 {
-    [CreateAssetMenu]
-    public class SpinGenerator : ScriptableObject
+    public class SpinGenerator
     {
-        public SpinResultList spinResultList;
-        public List<SpinData> spinDataList;
-        [HideInInspector] public int spinIndex;
+        private readonly SpinDataHolder _spinDataHolder;
+        
         private Dictionary<SpinData, int> _resultAppearCountDictionary;
         private Dictionary<SpinData, int> _remainExtensionCountDictionary;
         private Dictionary<SpinData, int> _startIndexDictionary;
         private Dictionary<SpinData, List<Vector2Int>> _intervalListDictionary;
-        public Action onResetState;
 
         public Dictionary<SpinData, int> GetRemainExtensionCountDictionary() => _remainExtensionCountDictionary;
         public Dictionary<SpinData, List<Vector2Int>> GetIntervalListDictionary() => _intervalListDictionary;
 
+        public SpinGenerator(SpinDataHolder spinDataHolder)
+        {
+            _spinDataHolder = spinDataHolder;
+        }
+
         public void GenerateSpinListNew()
         {
             ResetStates();
-            spinResultList.Value = new SpinResult[100];
+            _spinDataHolder.spinResultList.Value = new SpinResult[100];
             bool[] resultOccupiedArray = new bool[100];
-            var sortedSpinDataList = spinDataList.OrderByDescending(result => result.percentage).ToList();
-            
+            var sortedSpinDataList = _spinDataHolder.spinDataList.OrderByDescending(result => result.percentage).ToList();
+
             //set dictionaries
             _resultAppearCountDictionary = new Dictionary<SpinData, int>();
             //remain ext dictionary is for selecting the intervals more precisely.
@@ -41,7 +42,7 @@ namespace Game.Scripts.Spin
             _remainExtensionCountDictionary = new Dictionary<SpinData, int>();
             _startIndexDictionary = new Dictionary<SpinData, int>();
             _intervalListDictionary = new Dictionary<SpinData, List<Vector2Int>>();
-            foreach (var result in spinDataList)
+            foreach (var result in _spinDataHolder.spinDataList)
             {
                 _resultAppearCountDictionary[result] = 0;
                 _startIndexDictionary[result] = 0;
@@ -120,7 +121,7 @@ namespace Game.Scripts.Spin
                 resultOccupiedArray[placementIndex + placementIndexOffset] = true;
                 Vector2Int intervalVector = new Vector2Int(_startIndexDictionary[currentSpinData], 0);
                 _startIndexDictionary[currentSpinData] += resultInterval;
-                
+
                 // what I check here is if I had to extend interval to find an available index for placement, or
                 // if the other intervals were not extended and from this point I have to extend this interval no matter
                 // what to fill all the interval up to index 99. If it is the case, extend the interval
@@ -133,12 +134,12 @@ namespace Game.Scripts.Spin
                     _remainExtensionCountDictionary[currentSpinData]++;
                 }
 
-                intervalVector.y = _startIndexDictionary[currentSpinData]-1;
+                intervalVector.y = _startIndexDictionary[currentSpinData] - 1;
                 _resultAppearCountDictionary[currentSpinData]++;
                 _intervalListDictionary[currentSpinData].Add(intervalVector);
-                spinResultList.Value[placementIndex + placementIndexOffset] = currentSpinData.spinResult;
+                _spinDataHolder.spinResultList.Value[placementIndex + placementIndexOffset] = currentSpinData.spinResult;
             }
-            
+
             // In short this algorithm works perfectly for the given probabilities in the case, all %13 results shared in their
             // 9 interval by 8 length and 4 interval by 7 length (also correction is 9x8 + 7x4 = 100)
             // This applies for all the other results. For the given results and percentages in the case, algorithm
@@ -173,22 +174,22 @@ namespace Game.Scripts.Spin
                                    (100 % spinData.percentage)
                 ? 1
                 : 0;
-            
+
             return _startIndexDictionary[spinData] + spinInterval + spinRemainFactor;
         }
 
         public SpinResult Spin()
         {
-            var result = spinResultList.Value[spinIndex];
-            spinIndex = (spinIndex + 1) % 100;
+            var result = _spinDataHolder.spinResultList.Value[_spinDataHolder.spinIndex];
+            _spinDataHolder.spinIndex = (_spinDataHolder.spinIndex + 1) % 100;
             return result;
         }
 
         public void ResetStates()
         {
-            onResetState?.Invoke();
-            spinResultList.Value = null;
-            spinIndex = 0;
+            _spinDataHolder.onResetState?.Invoke();
+            _spinDataHolder.spinResultList.Value = null;
+            _spinDataHolder.spinIndex = 0;
         }
     }
 }

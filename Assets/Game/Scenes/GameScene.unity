@@ -474,7 +474,7 @@ MonoBehaviour:
   - {fileID: 578739138}
   - {fileID: 6532388348633924331}
   - {fileID: 6532388348338451406}
-  spinGenerator: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  _spinDataHolder: {fileID: 0}
   _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
   _coinEffectPrefab: {fileID: 409263692995244812, guid: 2648b269916107146b91c8214317360b,
     type: 3}
@@ -871,7 +871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0db218667589fb408470de827b3f61c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spinGenerator: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  _spinDataHolder: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
   _spinResultList: {fileID: 11400000, guid: 333ce04281621134aaa6cacdb687d58f, type: 2}
 --- !u!1 &832575517
 GameObject:
@@ -1287,7 +1287,7 @@ MonoBehaviour:
   - {fileID: 625116596}
   - {fileID: 1960494858}
   - {fileID: 437237751}
-  spinGenerator: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  _spinDataHolder: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
   _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
   _coinEffectPrefab: {fileID: 409263692995244812, guid: 2648b269916107146b91c8214317360b,
     type: 3}
