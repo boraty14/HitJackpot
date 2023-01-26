@@ -2,31 +2,31 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using UnityEngine.U2D;
 
 namespace Game.Scripts.GameElements
 {
     public class Slot : MonoBehaviour
     {
-        [SerializeField] private RectTransform _slotRectTransform;
         [SerializeField] private List<SlotItem> _slotItems;
         [SerializeField] private SpinSettings _spinSettings;
         private readonly List<SpinType> _spinTypes = new List<SpinType>();
         private int _currentSlotItemIndex;
         private float _slotRollEndHeight;
-        private const float SlotItemHeight = 260f;
+        private const float SlotItemHeight = 3f;
 
         public void Initialize()
         {
             SetSlotItems();
-            RandomizeSlotAtStart();
+            //RandomizeSlotAtStart();
             SetSlotItemImages(true);
         }
 
         private void SetSlotItems()
         {
             _slotRollEndHeight = _slotItems.Count % 2 == 0 ? -SlotItemHeight / 2f : 0f;
-            _slotRectTransform.anchoredPosition = new Vector2(_slotRectTransform.anchoredPosition.x, _slotRollEndHeight);
+            Debug.Log(_slotRollEndHeight);
+            transform.localPosition = new Vector3(transform.localPosition.x, _slotRollEndHeight,0f);
             _currentSlotItemIndex = (_slotItems.Count - 1) / 2;
 
             foreach (var slotItem in _slotItems)
@@ -77,8 +77,8 @@ namespace Game.Scripts.GameElements
         private async Task SpinOneItem(float spinDuration)
         {
             MoveLastSlotItemUp();
-            _slotRectTransform.anchoredPosition += Vector2.up * SlotItemHeight;
-            await _slotRectTransform.DOAnchorPosY(_slotRollEndHeight, spinDuration)
+            transform.localPosition += Vector3.up * SlotItemHeight;
+            await transform.DOLocalMoveY(_slotRollEndHeight, spinDuration)
                 .SetEase(Ease.Linear).AsyncWaitForCompletion();
         }
 
@@ -87,6 +87,11 @@ namespace Game.Scripts.GameElements
             var lastTransform = transform.GetChild(_slotItems.Count - 1);
             lastTransform.SetSiblingIndex(0);
             SetSlotItemIndex();
+            lastTransform.localPosition += (_slotItems.Count - 1) * SlotItemHeight * Vector3.up;
+            for (int i = 0; i < transform.childCount-1; i++)
+            {
+                //transform.GetChild(i).localPosition -= SlotItemHeight
+            }
         }
 
         private void SetSlotItemIndex()
