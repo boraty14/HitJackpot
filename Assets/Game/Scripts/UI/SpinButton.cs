@@ -1,3 +1,4 @@
+using Game.Scripts.SlotElement;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;

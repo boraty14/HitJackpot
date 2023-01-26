@@ -4,7 +4,8 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Game.Scripts.GameElements
+
+namespace Game.Scripts.Spin
 {
     [CreateAssetMenu]
     public class SpinGenerator : ScriptableObject
@@ -16,7 +17,7 @@ namespace Game.Scripts.GameElements
         private Dictionary<SpinData, int> _remainExtensionCountDictionary;
         private Dictionary<SpinData, int> _startIndexDictionary;
         private Dictionary<SpinData, List<Vector2Int>> _intervalListDictionary;
-        private const string SaveKey = "SAVEKEY";
+        public Action onResetState;
 
         public Dictionary<SpinData, int> GetRemainExtensionCountDictionary() => _remainExtensionCountDictionary;
         public Dictionary<SpinData, List<Vector2Int>> GetIntervalListDictionary() => _intervalListDictionary;
@@ -185,66 +186,9 @@ namespace Game.Scripts.GameElements
 
         public void ResetStates()
         {
-            ES3.DeleteKey(SaveKey);
+            onResetState?.Invoke();
             spinResultList.Value = null;
             spinIndex = 0;
         }
-
-        public void SaveSpinData()
-        {
-            var spinSave = new SpinSave
-            {
-                spinResults = spinResultList.Value,
-                spinIndex = this.spinIndex
-            };
-            ES3.Save<SpinSave>(SaveKey, spinSave);
-        }
-
-        public void LoadSpinData()
-        {
-            if (ES3.KeyExists(SaveKey))
-            {
-                var savedSpinData = ES3.Load<SpinSave>(SaveKey);
-                spinResultList.Value = savedSpinData.spinResults;
-                spinIndex = savedSpinData.spinIndex;
-            }
-            else
-            {
-                GenerateSpinListNew();
-            }
-        }
-    }
-
-
-    [Serializable]
-    public class SpinData
-    {
-        public SpinResult spinResult;
-        [Range(1, 100)] public int percentage;
-    }
-
-    [Serializable]
-    public struct SpinResult
-    {
-        public SpinType firstSpin;
-        public SpinType secondSpin;
-        public SpinType thirdSpin;
-    }
-
-    [Serializable]
-    public enum SpinType
-    {
-        Jackpot = 0,
-        Wild = 1,
-        Seven = 2,
-        Bonus = 3,
-        A = 4
-    }
-
-    [Serializable]
-    public class SpinSave
-    {
-        public SpinResult[] spinResults;
-        public int spinIndex;
     }
 }

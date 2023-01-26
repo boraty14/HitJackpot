@@ -1,9 +1,8 @@
-using System;
+using Game.Scripts.Spin;
 using UnityEngine;
 using UnityEngine.U2D;
-using UnityEngine.UI;
 
-namespace Game.Scripts.GameElements
+namespace Game.Scripts.SlotElement
 {
     public class SlotItem : MonoBehaviour
     {

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Game.Scripts.Effects;
+using Game.Scripts.Spin;
 using Lean.Pool;
 using UnityEngine;
 
-namespace Game.Scripts.GameElements
+namespace Game.Scripts.SlotElement
 {
     public class SlotController : MonoBehaviour
     {
@@ -15,7 +17,7 @@ namespace Game.Scripts.GameElements
         [SerializeField] private Transform _coinEffectTransform;
         public Action<bool> OnSpinStateChange;
         private bool _isSpinning;
-    
+
         private void Start()
         {
             foreach (var slot in _slots)
@@ -23,7 +25,7 @@ namespace Game.Scripts.GameElements
                 slot.Initialize();
             }
         }
-    
+
         public async void Spin(int spinIndex)
         {
             if (_isSpinning) return;
@@ -37,7 +39,7 @@ namespace Game.Scripts.GameElements
                 StopSpinning(coinEffectRate);
                 return;
             }
-        
+
             await _slots[2].SpinDelayedSlotToState(spinResult.thirdSpin, spinSlowDownDuration);
             StopSpinning(coinEffectRate);
         }
@@ -54,17 +56,21 @@ namespace Game.Scripts.GameElements
             OnSpinStateChange?.Invoke(_isSpinning);
 
             if (coinEffectRate < 0.01f) return;
-            var coinEffect = LeanPool.Spawn(_coinEffectPrefab,_coinEffectTransform);
+            var coinEffect = LeanPool.Spawn(_coinEffectPrefab, _coinEffectTransform);
             coinEffect.SetParticleEmission(coinEffectRate);
         }
 
         private async Task<SpinResult> SpinDefault()
         {
             var spinResult = spinGenerator.Spin();
-            Debug.Log(spinResult.firstSpin + " " + spinResult.secondSpin + " " + spinResult.thirdSpin + " spin index: " + (spinGenerator.spinIndex-1));
-            _ = _slots[0].SpinDefaultSlotToState(spinResult.firstSpin,_spinSettings.DefaultSpinTurnCount);
-            _ = _slots[1].SpinDefaultSlotToState(spinResult.secondSpin,_spinSettings.DefaultSpinTurnCount + _spinSettings.DefaultSpinTurnOffset);
-            await _slots[2].SpinDefaultSlotToState(spinResult.thirdSpin,_spinSettings.DefaultSpinTurnCount + 2 * _spinSettings.DefaultSpinTurnOffset);
+            Debug.Log(spinResult.firstSpin + " " + spinResult.secondSpin + " " + spinResult.thirdSpin +
+                      " spin index: " + (spinGenerator.spinIndex - 1));
+            Task firstSpin = _slots[0].SpinDefaultSlotToState(spinResult.firstSpin, _spinSettings.DefaultSpinTurnCount);
+            Task secondSpin = _slots[1].SpinDefaultSlotToState(spinResult.secondSpin,
+                _spinSettings.DefaultSpinTurnCount + _spinSettings.DefaultSpinTurnOffset);
+            Task thirdSpin = _slots[2].SpinDefaultSlotToState(spinResult.thirdSpin,
+                _spinSettings.DefaultSpinTurnCount + 2 * _spinSettings.DefaultSpinTurnOffset);
+            await Task.WhenAll(firstSpin, secondSpin, thirdSpin);
             return spinResult;
         }
 
@@ -81,7 +87,7 @@ namespace Game.Scripts.GameElements
 
         private float GetCoinEffectEmissionRate(SpinResult spinResult)
         {
-            if (spinResult.firstSpin == spinResult.secondSpin && spinResult.secondSpin == spinResult.thirdSpin)
+            if (spinResult.IsFull())
             {
                 return spinResult.firstSpin switch
                 {
@@ -93,6 +99,7 @@ namespace Game.Scripts.GameElements
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
+
             return 0f;
         }
     }

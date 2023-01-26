@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Scripts.GameElements
+namespace Game.Scripts.Spin
 {
     [CreateAssetMenu]
     public class SpinResultList : ScriptableObject

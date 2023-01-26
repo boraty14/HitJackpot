@@ -872,6 +872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spinGenerator: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  _spinResultList: {fileID: 11400000, guid: 333ce04281621134aaa6cacdb687d58f, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,8 +1682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb2a1187ee8d2442a19461ef47bc207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotModelAtlas: {fileID: 4343727234628468602, guid: a23fb161d6315cd42a7c47613749ba89,
-    type: 2}
+  _slotModelAtlas: {fileID: 0}
   _slotBackImage: {fileID: 0}
   _slotGradientImage: {fileID: 0}
   _slotWindowImage: {fileID: 0}

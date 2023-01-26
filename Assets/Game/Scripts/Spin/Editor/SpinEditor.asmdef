@@ -1,0 +1,18 @@
+{
+    "name": "SpinEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fa170006f8d85a64cb420b1d3deca67e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

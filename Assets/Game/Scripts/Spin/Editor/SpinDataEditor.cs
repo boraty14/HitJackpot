@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Game.Scripts.GameElements;
+using Game.Scripts.Spin;
 using UnityEditor;
 using UnityEngine;
 

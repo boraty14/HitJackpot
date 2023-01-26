@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
+using Game.Scripts.Spin;
 using UnityEngine;
-using UnityEngine.U2D;
 
-namespace Game.Scripts.GameElements
+namespace Game.Scripts.SlotElement
 {
     public class Slot : MonoBehaviour
     {

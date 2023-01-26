@@ -1,8 +1,9 @@
 using System.Collections;
+using Game.Scripts.Spin;
 using Lean.Pool;
 using UnityEngine;
 
-namespace Game.Scripts.GameElements
+namespace Game.Scripts.Effects
 {
     public class CoinEffect : MonoBehaviour
     {

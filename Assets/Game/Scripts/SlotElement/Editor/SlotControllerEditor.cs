@@ -1,4 +1,4 @@
-using Game.Scripts.GameElements;
+using Game.Scripts.SlotElement;
 using UnityEditor;
 using UnityEngine;
 
