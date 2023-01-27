@@ -3,6 +3,7 @@ using System.IO;
 using Game.Scripts.Spin;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -37,22 +38,26 @@ public class SpinTests
                 resultDictionary[GetKeyName(spinDataHolder.spinResultList.Value[i])].Add(i);
             }
 
+            bool isTestStillSuccessful = true;
             foreach (var spinData in spinDataHolder.spinDataList)
             {
                 for (int i = 0; i < intervalList[spinData].Count; i++)
                 {
                     var keyName = GetKeyName(spinData.spinResult);
                     var interval = intervalList[spinData][i];
-                    var spinIndex = resultDictionary[keyName][i];
-                    bool isTestStillSuccessful = spinIndex >= interval.x && spinIndex <= interval.y;
+                    var spinIndex = resultDictionary[keyName][i]; 
+                    isTestStillSuccessful = spinIndex >= interval.x && spinIndex <= interval.y;
                     if (!isTestStillSuccessful)
                     {
-                        Assert.Fail();
+                        Debug.LogError($"Test failed! " +
+                                       $"spin interval: {interval.x} - {interval.y} spin index : {spinIndex} " +
+                                       $"spin percentage: {spinData.percentage} " + 
+                                       $"spin result: {spinData.spinResult.firstSpin} {spinData.spinResult.secondSpin} {spinData.spinResult.thirdSpin}");
                     }
                 }
             }
             
-            Assert.Pass();
+            Assert.IsTrue(isTestStillSuccessful);
         }
     }
 
