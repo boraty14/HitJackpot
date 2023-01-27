@@ -93,11 +93,6 @@ namespace Game.Scripts.SlotElement
             var lastTransform = transform.GetChild(_slotItems.Count - 1);
             lastTransform.SetSiblingIndex(0);
             SetSlotItemIndex();
-            // lastTransform.localPosition += (_slotItems.Count - 1) * SlotItemHeight * Vector3.up;
-            // for (int i = 0; i < transform.childCount-1; i++)
-            // {
-            //     transform.GetChild(i).localPosition -= SlotItemHeight * Vector3.up;
-            // }
         }
 
         private void SetSlotItemIndex()

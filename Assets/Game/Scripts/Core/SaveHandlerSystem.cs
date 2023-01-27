@@ -1,5 +1,4 @@
 using Game.Scripts.Spin;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -26,7 +25,6 @@ namespace Game.Scripts.Core
 
             _saveHandler.onGameCloseState = SaveSpinData;
             _saveHandler.onLoadState = LoadSpinData;
-            Debug.Log(1);
         }
 
         private void SaveSpinData()

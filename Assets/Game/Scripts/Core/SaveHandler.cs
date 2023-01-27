@@ -1,5 +1,4 @@
 using System;
-using Game.Scripts.Spin;
 using UnityEngine;
 
 namespace Game.Scripts.Core
@@ -11,7 +10,6 @@ namespace Game.Scripts.Core
 
         private void OnEnable()
         {
-            Debug.Log(2);
             onLoadState?.Invoke();
         }
 
