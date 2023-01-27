@@ -2,10 +2,10 @@ using Game.Scripts.SlotElement;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(SlotController))]
+[CustomEditor(typeof(SlotMachine))]
 public class SlotControllerEditor : Editor
 {
-    public override void OnInspectorGUI()
+    /*public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
         SlotController slotController = (SlotController)target;
@@ -37,5 +37,5 @@ public class SlotControllerEditor : Editor
             } 
             slotController.Spin(2);
         }
-    }
+    }*/
 }

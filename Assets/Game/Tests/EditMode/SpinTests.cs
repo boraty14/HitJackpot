@@ -20,7 +20,6 @@ public class SpinTests
         using (var container = builder.Build())
         {
             var spinGenerator = container.Resolve<SpinDataHolder>();
-            Assert.AreEqual(1,spinGenerator.TryMe);
         }
     }
 }

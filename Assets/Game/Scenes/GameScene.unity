@@ -257,11 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bcdbe97588f4744abd6588dd10026d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spinButton: {fileID: 41004951}
-  _slotController: {fileID: 1315839282}
-  _slotModelAtlas: {fileID: 4343727234628468602, guid: bec6a13f1ac98784da79ee0e3f384075,
+  spinButton: {fileID: 41004951}
+  slotModelAtlas: {fileID: 4343727234628468602, guid: bec6a13f1ac98784da79ee0e3f384075,
     type: 2}
-  _spinButtonImage: {fileID: 41004952}
+  spinButtonImage: {fileID: 41004952}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,15 +469,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38d263573f640e4fa111b43659f292f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slots:
-  - {fileID: 578739138}
-  - {fileID: 6532388348633924331}
-  - {fileID: 6532388348338451406}
-  _spinDataHolder: {fileID: 0}
-  _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
-  _coinEffectPrefab: {fileID: 409263692995244812, guid: 2648b269916107146b91c8214317360b,
-    type: 3}
-  _coinEffectTransform: {fileID: 1844973374}
+  slots: []
+  coinEffectPrefab: {fileID: 0}
+  coinEffectTransform: {fileID: 0}
 --- !u!4 &437237750 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3920545061465446213, guid: 69f111736faf3084e810e25c202f00d8,
@@ -857,7 +850,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &758669732
 MonoBehaviour:
@@ -871,8 +864,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0db218667589fb408470de827b3f61c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spinDataHolder: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
-  _spinResultList: {fileID: 11400000, guid: 333ce04281621134aaa6cacdb687d58f, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,7 +993,7 @@ Transform:
   - {fileID: 1315839280}
   - {fileID: 1907327200}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &857732694
 MonoBehaviour:
@@ -1180,8 +1171,62 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1181379031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1181379032}
+  - component: {fileID: 1181379033}
+  m_Layer: 0
+  m_Name: GameLifetimeScope
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1181379032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181379031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1181379033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181379031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31ee01a55e8090a40bb9f10034651230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  _spinDataHolder: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
+  _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
+  _spinResultList: {fileID: 11400000, guid: 333ce04281621134aaa6cacdb687d58f, type: 2}
+  _slotMachine: {fileID: 1315839282}
+  _saveHandler: {fileID: 758669732}
+  _spinButton: {fileID: 41004954}
 --- !u!1 &1315839279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1283,15 +1328,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38d263573f640e4fa111b43659f292f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slots:
+  slots:
   - {fileID: 625116596}
   - {fileID: 1960494858}
   - {fileID: 437237751}
-  _spinDataHolder: {fileID: 11400000, guid: b459fac73a080cf4eaa82d547d5fe959, type: 2}
-  _spinSettings: {fileID: 11400000, guid: 188950f70f11be14b87ab262489bf9b2, type: 2}
-  _coinEffectPrefab: {fileID: 409263692995244812, guid: 2648b269916107146b91c8214317360b,
+  coinEffectPrefab: {fileID: 409263692995244812, guid: 2648b269916107146b91c8214317360b,
     type: 3}
-  _coinEffectTransform: {fileID: 1844973374}
+  coinEffectTransform: {fileID: 1844973374}
 --- !u!1 &1361544071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,7 +1430,7 @@ RectTransform:
   - {fileID: 1835438120}
   - {fileID: 41004950}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1420,7 +1463,7 @@ Transform:
   m_GameObject: {fileID: 1538705574}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 4.8, z: 1}
+  m_LocalScale: {x: 7.4, y: 4.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1315839280}
@@ -1710,12 +1753,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1844973372}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 5.25, z: 30}
+  m_LocalPosition: {x: 0, y: 0, z: 30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1907327199
 GameObject:

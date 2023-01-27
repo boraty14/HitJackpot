@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using VContainer;
 
 namespace Game.Scripts.Spin
 {
@@ -18,6 +17,7 @@ namespace Game.Scripts.Spin
         public Dictionary<SpinData, int> GetRemainExtensionCountDictionary() => _remainExtensionCountDictionary;
         public Dictionary<SpinData, List<Vector2Int>> GetIntervalListDictionary() => _intervalListDictionary;
 
+        [Inject]
         public SpinGenerator(SpinDataHolder spinDataHolder)
         {
             _spinDataHolder = spinDataHolder;
@@ -185,9 +185,8 @@ namespace Game.Scripts.Spin
             return result;
         }
 
-        public void ResetStates()
+        private void ResetStates()
         {
-            _spinDataHolder.onResetState?.Invoke();
             _spinDataHolder.spinResultList.Value = null;
             _spinDataHolder.spinIndex = 0;
         }
