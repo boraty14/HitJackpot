@@ -14,7 +14,6 @@ namespace Game.Scripts.Spin
         private Dictionary<SpinData, int> _startIndexDictionary;
         private Dictionary<SpinData, List<Vector2Int>> _intervalListDictionary;
 
-        public Dictionary<SpinData, int> GetRemainExtensionCountDictionary() => _remainExtensionCountDictionary;
         public Dictionary<SpinData, List<Vector2Int>> GetIntervalListDictionary() => _intervalListDictionary;
 
         [Inject]

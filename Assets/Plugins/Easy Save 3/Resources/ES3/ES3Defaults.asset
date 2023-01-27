@@ -38,7 +38,6 @@ MonoBehaviour:
     - LeanPool
     - PPv2URPConverters
     - Spin
-    - SpinEditor
     - VContainer
     - VContainer.Editor
     - VContainer.EnableCodeGen
