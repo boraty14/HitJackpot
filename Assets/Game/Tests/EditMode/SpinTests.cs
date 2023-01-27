@@ -10,7 +10,6 @@ using VContainer.Unity;
 [TestFixture]
 public class SpinTests
 {
-    // A Test behaves as an ordinary method
     [Test]
     public void SpinTestsSimplePasses()
     {
